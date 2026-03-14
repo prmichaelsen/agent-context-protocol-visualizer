@@ -34,11 +34,11 @@ milestones:
   - id: milestone_3
     name: Detail Views
     status: not_started
-    progress: 0
-    started: null
+    progress: 50
+    started: "2026-03-14"
     completed: null
     estimated_weeks: "1"
-    tasks_completed: 0
+    tasks_completed: 2
     tasks_total: 4
     notes: P1 — clickable milestone/task detail pages with markdown rendering
 
@@ -128,18 +128,18 @@ tasks:
   milestone_3:
     - id: task_11
       name: Install Markdown Dependencies & Build MarkdownContent Component
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-3-detail-views/task-11-markdown-rendering-infrastructure.md
       estimated_hours: "2"
-      completed_date: null
+      completed_date: "2026-03-14"
       notes: react-markdown, rehype-highlight, @tailwindcss/typography, MarkdownContent component
 
     - id: task_12
       name: Build Markdown Loading Service
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-3-detail-views/task-12-markdown-loading-service.md
       estimated_hours: "3"
-      completed_date: null
+      completed_date: "2026-03-14"
       notes: Server functions for local/GitHub markdown loading, milestone file resolution
 
     - id: task_13
@@ -166,10 +166,19 @@ documentation:
 
 progress:
   planning: 100
-  implementation: 71
-  overall: 71
+  implementation: 86
+  overall: 86
 
 recent_work:
+  - date: "2026-03-14"
+    description: "M3 Tasks 11-12: markdown rendering & loading service"
+    items:
+      - "Installed react-markdown, rehype-highlight, @tailwindcss/typography"
+      - "Created MarkdownContent component with dark theme prose styling"
+      - "Created markdown.service.ts with local + GitHub loading"
+      - "Implemented milestone file resolution by directory scan"
+      - "Build passes with all new code"
+
   - date: "2026-03-14"
     description: P1 detail views planned
     items:
