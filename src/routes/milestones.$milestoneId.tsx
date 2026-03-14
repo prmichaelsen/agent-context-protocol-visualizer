@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { useProgressData } from '../contexts/ProgressContext'
 import { Breadcrumb } from '../components/Breadcrumb'
 import { DetailHeader } from '../components/DetailHeader'
 import { ProgressBar } from '../components/ProgressBar'
 import { StatusDot } from '../components/StatusDot'
-import { MarkdownContent } from '../components/MarkdownContent'
+import { MarkdownContent, buildLinkMap } from '../components/MarkdownContent'
 import { getMarkdownContent, resolveMilestoneFile } from '../services/markdown.service'
 import type { MarkdownResult, ResolveFileResult } from '../services/markdown.service'
 
@@ -29,10 +29,12 @@ function MilestoneDetailPage() {
   const data = useProgressData()
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [markdownError, setMarkdownError] = useState<string | null>(null)
+  const [markdownFilePath, setMarkdownFilePath] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
   const milestone = data?.milestones.find((m) => m.id === milestoneId)
   const tasks = data?.tasks[milestoneId] || []
+  const linkMap = useMemo(() => (data ? buildLinkMap(data) : {}), [data])
 
   useEffect(() => {
     if (!milestoneId) return
@@ -40,6 +42,7 @@ function MilestoneDetailPage() {
     setLoading(true)
     setMarkdown(null)
     setMarkdownError(null)
+    setMarkdownFilePath(null)
 
     const github = getGitHubParams()
 
@@ -51,6 +54,7 @@ function MilestoneDetailPage() {
           return
         }
 
+        setMarkdownFilePath(resolveResult.filePath)
         return getMarkdownContent({ data: { filePath: resolveResult.filePath, github } })
           .then((mdResult: MarkdownResult) => {
             if (mdResult.ok) {
@@ -111,7 +115,7 @@ function MilestoneDetailPage() {
       {loading ? (
         <p className="text-sm text-gray-600">Loading document...</p>
       ) : markdown ? (
-        <MarkdownContent content={markdown} />
+        <MarkdownContent content={markdown} basePath={markdownFilePath ?? undefined} linkMap={linkMap} />
       ) : markdownError ? (
         <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4 text-sm text-gray-500">
           No document found — {markdownError}

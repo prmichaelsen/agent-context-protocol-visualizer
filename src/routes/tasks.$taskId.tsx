@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react'
 import { useProgressData } from '../contexts/ProgressContext'
 import { Breadcrumb } from '../components/Breadcrumb'
 import { DetailHeader } from '../components/DetailHeader'
-import { MarkdownContent } from '../components/MarkdownContent'
+import { MarkdownContent, buildLinkMap } from '../components/MarkdownContent'
 import { getMarkdownContent } from '../services/markdown.service'
 import { resolveTaskFile } from '../services/markdown.service'
 import type { MarkdownResult } from '../services/markdown.service'
@@ -83,6 +83,9 @@ function TaskDetailPage() {
       })
   }, [task])
 
+  const linkMap = useMemo(() => (data ? buildLinkMap(data) : {}), [data])
+  const taskFilePath = useMemo(() => resolveTaskFile(task), [task])
+
   if (!data || !task || !milestone) {
     return (
       <div className="p-6">
@@ -130,7 +133,7 @@ function TaskDetailPage() {
       {loading ? (
         <p className="text-sm text-gray-600">Loading document...</p>
       ) : markdown ? (
-        <MarkdownContent content={markdown} />
+        <MarkdownContent content={markdown} basePath={taskFilePath ?? undefined} linkMap={linkMap} />
       ) : markdownError ? (
         <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-4 text-sm text-gray-500">
           No document found — {markdownError}

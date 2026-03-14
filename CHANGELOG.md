@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0] - 2026-03-14
+
+### Added
+- Rewrite relative markdown links to visualizer routes in milestone and task detail pages
+- Custom react-markdown link component resolves relative file paths to internal routes
+- Link map built from progress data maps task/milestone file paths to visualizer URLs
+
 ## [0.6.1] - 2026-03-14
 
 ### Fixed
