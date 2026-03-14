@@ -16,7 +16,7 @@
     "dev": "vite dev --port 3400 --host",
     "build": "vite build",
     "serve": "vite preview",
-    "deploy": "export $(cat .env.cloudflare.local | xargs) && npm run build && wrangler deploy",
+    "deploy": "export $(cat .env.cloudflare.local | xargs) && VITE_HOSTED=true npm run build && wrangler deploy",
     "tail": "export $(cat .env.cloudflare.local | xargs) && wrangler tail",
     "test": "vitest",
     "test:run": "vitest run",

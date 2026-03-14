@@ -21,17 +21,20 @@ export const Route = createRootRoute({
     let progressData: ProgressData | null = null
     let projects: AcpProject[] = []
 
-    try {
-      const [result, projectList] = await Promise.all([
-        getProgressData({ data: {} }),
-        listProjects(),
-      ])
-      if (result.ok) {
-        progressData = result.data
+    // VITE_HOSTED mode: skip filesystem access entirely (Cloudflare Workers)
+    if (!import.meta.env.VITE_HOSTED) {
+      try {
+        const [result, projectList] = await Promise.all([
+          getProgressData({ data: {} }),
+          listProjects(),
+        ])
+        if (result.ok) {
+          progressData = result.data
+        }
+        projects = projectList
+      } catch {
+        // No filesystem available
       }
-      projects = projectList
-    } catch {
-      // Cloudflare Workers or other environment without filesystem
     }
 
     return { progressData, projects }
