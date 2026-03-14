@@ -2,7 +2,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
 import { MilestoneTable } from '../components/MilestoneTable'
 import { MilestoneTree } from '../components/MilestoneTree'
-import { ViewToggle } from '../components/ViewToggle'
+import { MilestoneKanban } from '../components/MilestoneKanban'
+import { ViewToggle, type ViewMode } from '../components/ViewToggle'
 import { FilterBar } from '../components/FilterBar'
 import { SearchInput } from '../components/SearchInput'
 import { useFilteredData } from '../lib/useFilteredData'
@@ -14,7 +15,7 @@ export const Route = createFileRoute('/milestones')({
 
 function MilestonesPage() {
   const { progressData } = Route.useRouteContext()
-  const [view, setView] = useState<'table' | 'tree'>('table')
+  const [view, setView] = useState<ViewMode>('table')
   const [status, setStatus] = useState<Status | 'all'>('all')
   const [search, setSearch] = useState('')
 
@@ -34,16 +35,20 @@ function MilestonesPage() {
         <h2 className="text-lg font-semibold">Milestones</h2>
         <ViewToggle value={view} onChange={setView} />
       </div>
-      <div className="flex items-center gap-3 mb-4">
-        <FilterBar status={status} onStatusChange={setStatus} />
-        <div className="w-64">
-          <SearchInput value={search} onChange={setSearch} placeholder="Filter milestones..." />
+      {view !== 'kanban' && (
+        <div className="flex items-center gap-3 mb-4">
+          <FilterBar status={status} onStatusChange={setStatus} />
+          <div className="w-64">
+            <SearchInput value={search} onChange={setSearch} placeholder="Filter milestones..." />
+          </div>
         </div>
-      </div>
+      )}
       {view === 'table' ? (
         <MilestoneTable milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : (
+      ) : view === 'tree' ? (
         <MilestoneTree milestones={filtered.milestones} tasks={filtered.tasks} />
+      ) : (
+        <MilestoneKanban milestones={filtered.milestones} tasks={filtered.tasks} />
       )}
     </div>
   )
