@@ -6,7 +6,7 @@ export type ProgressResult =
   | { ok: false; error: 'FILE_NOT_FOUND' | 'PARSE_ERROR' | 'NO_FILESYSTEM'; message: string; path: string }
 
 export const getProgressData = createServerFn({ method: 'GET' })
-  .validator((input: { path?: string }) => input)
+  .inputValidator((input: { path?: string }) => input)
   .handler(async ({ data: input }): Promise<ProgressResult> => {
     try {
       const fs = await import('fs')

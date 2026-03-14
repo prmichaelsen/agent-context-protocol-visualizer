@@ -44,7 +44,7 @@ export const listProjects = createServerFn({ method: 'GET' }).handler(
 )
 
 export const getProjectProgressPath = createServerFn({ method: 'GET' })
-  .validator((input: { projectId: string }) => input)
+  .inputValidator((input: { projectId: string }) => input)
   .handler(async ({ data }): Promise<string | null> => {
     try {
       const { readFileSync, existsSync } = await import('fs')

@@ -6,7 +6,7 @@ export type GitHubResult =
   | { ok: false; error: string; message: string }
 
 export const fetchGitHubProgress = createServerFn({ method: 'GET' })
-  .validator((input: { owner: string; repo: string; branch?: string; token?: string }) => input)
+  .inputValidator((input: { owner: string; repo: string; branch?: string; token?: string }) => input)
   .handler(async ({ data: input }): Promise<GitHubResult> => {
     const { parseProgressYaml } = await import('../lib/yaml-loader')
 
