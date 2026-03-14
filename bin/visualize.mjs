@@ -60,8 +60,29 @@ console.log(`\n  ACP Progress Visualizer`)
 console.log(`  Loading: ${progressPath}`)
 console.log(`  Port:    ${port}\n`)
 
+// Resolve vite binary — check package's own node_modules first,
+// then walk up (npx hoists deps to a shared node_modules)
+function findViteBin() {
+  // Local development: package has its own node_modules
+  const local = resolve(packageRoot, 'node_modules', '.bin', 'vite')
+  if (existsSync(local)) return local
+
+  // npx: deps hoisted — walk up from package root to find node_modules/.bin
+  let dir = packageRoot
+  while (dir !== '/') {
+    const candidate = resolve(dir, 'node_modules', '.bin', 'vite')
+    if (existsSync(candidate)) return candidate
+    dir = resolve(dir, '..')
+  }
+
+  // Fallback: hope it's on PATH
+  return 'vite'
+}
+
+const viteBin = findViteBin()
+
 // Start vite dev server from the package directory
-const child = spawn('npx', ['vite', 'dev', '--port', port, '--host'], {
+const child = spawn(viteBin, ['dev', '--port', port, '--host'], {
   cwd: packageRoot,
   stdio: 'inherit',
   env: {
