@@ -1,14 +1,17 @@
-import { readFileSync } from 'fs'
-import { parseProgressYaml } from '../lib/yaml-loader'
-import { getProgressYamlPath } from '../lib/config'
+import { createServerFn } from '@tanstack/react-start'
 import type { ProgressData } from '../lib/types'
 
 export type ProgressResult =
   | { ok: true; data: ProgressData }
   | { ok: false; error: 'FILE_NOT_FOUND' | 'PARSE_ERROR'; message: string; path: string }
 
-export class ProgressDatabaseService {
-  static getProgressData(): ProgressResult {
+export const getProgressData = createServerFn({ method: 'GET' }).handler(
+  async (): Promise<ProgressResult> => {
+    // Dynamic imports keep fs and yaml-loader out of the client bundle
+    const { readFileSync } = await import('fs')
+    const { parseProgressYaml } = await import('../lib/yaml-loader')
+    const { getProgressYamlPath } = await import('../lib/config')
+
     const filePath = getProgressYamlPath()
 
     try {
@@ -42,5 +45,5 @@ export class ProgressDatabaseService {
         path: filePath,
       }
     }
-  }
-}
+  },
+)

@@ -2,7 +2,7 @@ import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-r
 import { useAutoRefresh } from '../lib/useAutoRefresh'
 import { Sidebar } from '../components/Sidebar'
 import { Header } from '../components/Header'
-import { ProgressDatabaseService } from '../services/progress-database.service'
+import { getProgressData } from '../services/progress-database.service'
 import type { ProgressData } from '../lib/types'
 
 import appCss from '../styles.css?url'
@@ -12,7 +12,7 @@ export const Route = createRootRoute({
     let progressData: ProgressData | null = null
 
     try {
-      const result = ProgressDatabaseService.getProgressData()
+      const result = await getProgressData()
       if (result.ok) {
         progressData = result.data
       }

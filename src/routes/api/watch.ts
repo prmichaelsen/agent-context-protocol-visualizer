@@ -5,7 +5,7 @@ export const Route = createFileRoute('/api/watch')({
   server: {
     handlers: {
       GET: async () => {
-        const watcher = getFileWatcher()
+        const watcher = await getFileWatcher()
 
         const stream = new ReadableStream({
           start(controller) {

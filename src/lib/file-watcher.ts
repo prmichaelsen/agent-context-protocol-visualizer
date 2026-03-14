@@ -1,6 +1,3 @@
-import { watch } from 'fs'
-import { getProgressYamlPath } from './config'
-
 type Controller = ReadableStreamDefaultController
 
 let watcher: {
@@ -8,8 +5,11 @@ let watcher: {
   removeClient: (controller: Controller) => void
 } | null = null
 
-export function getFileWatcher() {
+export async function getFileWatcher() {
   if (watcher) return watcher
+
+  const { watch } = await import('fs')
+  const { getProgressYamlPath } = await import('./config')
 
   const filePath = getProgressYamlPath()
   const clients = new Set<Controller>()
