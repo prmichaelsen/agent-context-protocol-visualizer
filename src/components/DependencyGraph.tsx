@@ -35,7 +35,7 @@ const statusColors: Record<Status, { bg: string; border: string; text: string }>
 
 function buildGraph(data: ProgressData): { nodes: GraphNode[]; edges: GraphEdge[]; width: number; height: number } {
   const g = new dagre.graphlib.Graph()
-  g.setGraph({ rankdir: 'LR', nodesep: 30, ranksep: 60, marginx: 20, marginy: 20 })
+  g.setGraph({ rankdir: 'TB', nodesep: 30, ranksep: 60, marginx: 20, marginy: 20 })
   g.setDefaultEdgeLabel(() => ({}))
 
   // Collect all tasks with their milestone context
