@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import {
   createColumnHelper,
   useReactTable,
@@ -143,11 +143,8 @@ export function MilestoneTable({ milestones, tasks }: MilestoneTableProps) {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <>
-              <tr
-                key={row.id}
-                className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors"
-              >
+            <Fragment key={row.id}>
+              <tr className="border-b border-gray-800/50 hover:bg-gray-800/30 transition-colors">
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-3 py-2">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -155,13 +152,13 @@ export function MilestoneTable({ milestones, tasks }: MilestoneTableProps) {
                 ))}
               </tr>
               {expanded.has(row.original.id) && (
-                <tr key={`${row.id}-tasks`}>
+                <tr>
                   <td colSpan={columns.length} className="bg-gray-900/30 px-3 py-1">
                     <TaskList tasks={tasks[row.original.id] || []} />
                   </td>
                 </tr>
               )}
-            </>
+            </Fragment>
           ))}
         </tbody>
       </table>
