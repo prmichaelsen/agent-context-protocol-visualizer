@@ -1,10 +1,11 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { LayoutDashboard, Flag, CheckSquare, Search } from 'lucide-react'
+import { LayoutDashboard, Flag, CheckSquare, Clock, Search } from 'lucide-react'
 
 const navItems = [
   { to: '/' as const, icon: LayoutDashboard, label: 'Overview' },
   { to: '/milestones' as const, icon: Flag, label: 'Milestones' },
   { to: '/tasks' as const, icon: CheckSquare, label: 'Tasks' },
+  { to: '/activity' as const, icon: Clock, label: 'Activity' },
 ]
 
 export function Sidebar() {

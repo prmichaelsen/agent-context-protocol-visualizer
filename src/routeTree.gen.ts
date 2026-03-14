@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TasksRouteImport } from './routes/tasks'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as MilestonesRouteImport } from './routes/milestones'
+import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiWatchRouteImport } from './routes/api/watch'
 
@@ -30,6 +31,11 @@ const MilestonesRoute = MilestonesRouteImport.update({
   path: '/milestones',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ActivityRoute = ActivityRouteImport.update({
+  id: '/activity',
+  path: '/activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const ApiWatchRoute = ApiWatchRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/milestones': typeof MilestonesRoute
   '/search': typeof SearchRoute
   '/tasks': typeof TasksRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/milestones': typeof MilestonesRoute
   '/search': typeof SearchRoute
   '/tasks': typeof TasksRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/activity': typeof ActivityRoute
   '/milestones': typeof MilestonesRoute
   '/search': typeof SearchRoute
   '/tasks': typeof TasksRoute
@@ -65,14 +74,28 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/milestones' | '/search' | '/tasks' | '/api/watch'
+  fullPaths:
+    | '/'
+    | '/activity'
+    | '/milestones'
+    | '/search'
+    | '/tasks'
+    | '/api/watch'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/milestones' | '/search' | '/tasks' | '/api/watch'
-  id: '__root__' | '/' | '/milestones' | '/search' | '/tasks' | '/api/watch'
+  to: '/' | '/activity' | '/milestones' | '/search' | '/tasks' | '/api/watch'
+  id:
+    | '__root__'
+    | '/'
+    | '/activity'
+    | '/milestones'
+    | '/search'
+    | '/tasks'
+    | '/api/watch'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ActivityRoute: typeof ActivityRoute
   MilestonesRoute: typeof MilestonesRoute
   SearchRoute: typeof SearchRoute
   TasksRoute: typeof TasksRoute
@@ -102,6 +125,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MilestonesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/activity': {
+      id: '/activity'
+      path: '/activity'
+      fullPath: '/activity'
+      preLoaderRoute: typeof ActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -121,6 +151,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ActivityRoute: ActivityRoute,
   MilestonesRoute: MilestonesRoute,
   SearchRoute: SearchRoute,
   TasksRoute: TasksRoute,
