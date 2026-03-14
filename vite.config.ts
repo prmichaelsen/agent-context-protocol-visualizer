@@ -7,10 +7,10 @@ import { cloudflare } from '@cloudflare/vite-plugin'
 
 export default defineConfig(({ command }) => ({
   plugins: [
-    cloudflare({
-      viteEnvironment: { name: 'ssr' },
-      ...(command === 'serve' ? { config: { observability: { enabled: false } } } : {}),
-    }),
+    // Only use Cloudflare plugin for production builds — local dev uses Node.js SSR
+    ...(command === 'build'
+      ? [cloudflare({ viteEnvironment: { name: 'ssr' } })]
+      : []),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
