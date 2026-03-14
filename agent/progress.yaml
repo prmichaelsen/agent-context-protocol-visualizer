@@ -12,11 +12,11 @@ milestones:
   - id: milestone_1
     name: Project Scaffold & Data Pipeline
     status: in_progress
-    progress: 25
+    progress: 50
     started: "2026-03-14"
     completed: null
     estimated_weeks: "1"
-    tasks_completed: 1
+    tasks_completed: 2
     tasks_total: 4
     notes: Foundation milestone — all subsequent work depends on this data pipeline
 
@@ -44,10 +44,10 @@ tasks:
 
     - id: task_2
       name: Implement Data Model & YAML Parser
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-1-project-scaffold-data-pipeline/task-2-implement-data-model-yaml-parser.md
       estimated_hours: "3"
-      completed_date: null
+      completed_date: "2026-03-14"
       notes: Types, lenient parsing, agent-drift handling
 
     - id: task_3
