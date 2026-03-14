@@ -5,6 +5,9 @@ export function useAutoRefresh() {
   const router = useRouter()
 
   useEffect(() => {
+    // Skip file-watcher SSE in hosted mode — no local filesystem to watch
+    if (import.meta.env.VITE_HOSTED) return
+
     const eventSource = new EventSource('/api/watch')
 
     eventSource.onmessage = () => {

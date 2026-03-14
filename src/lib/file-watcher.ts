@@ -15,6 +15,11 @@ export async function getFileWatcher() {
   const clients = new Set<Controller>()
 
   try {
+    // existsSync will throw on Workers where fs is stubbed
+    const { existsSync } = await import('fs')
+    if (!existsSync(filePath)) {
+      throw new Error(`File not found: ${filePath}`)
+    }
     watch(filePath, (eventType) => {
       if (eventType === 'change') {
         for (const controller of clients) {
@@ -27,7 +32,7 @@ export async function getFileWatcher() {
       }
     })
   } catch (err) {
-    console.warn('[FileWatcher] Could not watch file:', err)
+    throw new Error(`[FileWatcher] Cannot watch: ${err}`)
   }
 
   watcher = {
