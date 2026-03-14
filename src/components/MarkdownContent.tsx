@@ -8,8 +8,7 @@ interface MarkdownContentProps {
 
 export function MarkdownContent({ content, className }: MarkdownContentProps) {
   return (
-    <ReactMarkdown
-      rehypePlugins={[rehypeHighlight]}
+    <div
       className={`prose prose-invert prose-sm max-w-none
         prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-800
         prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-gray-200
@@ -23,7 +22,9 @@ export function MarkdownContent({ content, className }: MarkdownContentProps) {
         prose-blockquote:border-gray-700 prose-blockquote:text-gray-400
         ${className ?? ''}`}
     >
-      {content}
-    </ReactMarkdown>
+      <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+        {content}
+      </ReactMarkdown>
+    </div>
   )
 }
