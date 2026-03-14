@@ -12,13 +12,29 @@ function HomePage() {
   const progressData = useProgressData()
 
   if (!progressData) {
+    const isHosted = import.meta.env.VITE_HOSTED
+
     return (
       <div className="p-6">
-        <div className="p-4 bg-red-900/20 border border-red-800 rounded-lg">
-          <p className="text-red-400 font-medium">Failed to load progress data</p>
-          <p className="text-red-400/70 text-sm mt-1">
-            Check that progress.yaml exists and is valid YAML
-          </p>
+        <div className="p-5 bg-gray-900/50 border border-gray-800 rounded-xl text-center max-w-md mx-auto mt-12">
+          <h2 className="text-lg font-semibold mb-2">ACP Progress Visualizer</h2>
+          {isHosted ? (
+            <>
+              <p className="text-gray-400 text-sm mb-4">
+                Enter a GitHub repository in the sidebar to visualize its ACP progress.
+              </p>
+              <div className="text-xs text-gray-600 space-y-1">
+                <p>Example: <span className="font-mono text-gray-400">prmichaelsen/agent-context-protocol</span></p>
+                <p>The repo must have <span className="font-mono text-gray-400">agent/progress.yaml</span></p>
+              </div>
+            </>
+          ) : (
+            <>
+              <p className="text-red-400/70 text-sm">
+                No progress.yaml found. Make sure you're in an ACP project directory.
+              </p>
+            </>
+          )}
         </div>
       </div>
     )
