@@ -135,7 +135,11 @@ function normalizeMilestone(raw: unknown, index: number): Milestone {
     id: safeString(known.id, `milestone_${index + 1}`),
     name: safeString(known.name, `Milestone ${index + 1}`),
     status: normalizeStatus(known.status),
-    progress: safeNumber(known.progress),
+    progress: known.progress != null
+      ? safeNumber(known.progress)
+      : safeNumber(known.tasks_total) > 0
+        ? Math.round((safeNumber(known.tasks_completed) / safeNumber(known.tasks_total)) * 100)
+        : normalizeStatus(known.status) === 'completed' ? 100 : 0,
     started: known.started ? safeString(known.started) : null,
     completed: known.completed ? safeString(known.completed) : null,
     estimated_weeks: safeString(known.estimated_weeks, '0'),
