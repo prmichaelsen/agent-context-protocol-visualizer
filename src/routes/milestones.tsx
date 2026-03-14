@@ -4,6 +4,7 @@ import { MilestoneTable } from '../components/MilestoneTable'
 import { MilestoneTree } from '../components/MilestoneTree'
 import { MilestoneKanban } from '../components/MilestoneKanban'
 import { MilestoneGantt } from '../components/MilestoneGantt'
+import { DependencyGraph } from '../components/DependencyGraph'
 import { ViewToggle, type ViewMode } from '../components/ViewToggle'
 import { FilterBar } from '../components/FilterBar'
 import { SearchInput } from '../components/SearchInput'
@@ -51,8 +52,10 @@ function MilestonesPage() {
         <MilestoneTree milestones={filtered.milestones} tasks={filtered.tasks} />
       ) : view === 'kanban' ? (
         <MilestoneKanban milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : (
+      ) : view === 'gantt' ? (
         <MilestoneGantt milestones={filtered.milestones} tasks={filtered.tasks} />
+      ) : (
+        <DependencyGraph data={filtered} />
       )}
     </div>
   )

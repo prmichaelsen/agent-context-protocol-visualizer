@@ -69,9 +69,21 @@ export function MilestoneKanban({ milestones, tasks }: MilestoneKanbanProps) {
     return <p className="text-gray-600 text-sm">No milestones</p>
   }
 
+  // Only show columns that have items, except always show the core 3
+  const coreStatuses = new Set<Status>(['not_started', 'in_progress', 'completed'])
+  const activeColumns = columns.filter(
+    (col) =>
+      coreStatuses.has(col.status) ||
+      milestones.some((m) => m.status === col.status),
+  )
+  const gridCols =
+    activeColumns.length <= 3
+      ? 'grid-cols-3'
+      : 'grid-cols-4'
+
   return (
-    <div className="grid grid-cols-4 gap-4 min-h-[300px]">
-      {columns.map((col) => {
+    <div className={`grid ${gridCols} gap-4 min-h-[300px]`}>
+      {activeColumns.map((col) => {
         const items = milestones.filter((m) => m.status === col.status)
         return (
           <div key={col.status} className="flex flex-col">
