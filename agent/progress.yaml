@@ -3,31 +3,142 @@ project:
   version: 0.1.0
   started: 2026-03-14
   status: in_progress
+  current_milestone: milestone_1
   description: |
     Browser-based read-only dashboard for visualizing ACP progress.yaml data.
     TanStack Start app with table/tree/kanban views, search, filtering, and auto-refresh.
 
-milestones: []
+milestones:
+  - id: milestone_1
+    name: Project Scaffold & Data Pipeline
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: "1"
+    tasks_completed: 0
+    tasks_total: 4
+    notes: Foundation milestone — all subsequent work depends on this data pipeline
 
-tasks: {}
+  - id: milestone_2
+    name: Dashboard Views & Interaction
+    status: not_started
+    progress: 0
+    started: null
+    completed: null
+    estimated_weeks: "1.5"
+    tasks_completed: 0
+    tasks_total: 6
+    notes: P0 dashboard UI — table, tree, search, filtering
+
+tasks:
+  milestone_1:
+    - id: task_1
+      name: Initialize TanStack Start Project
+      status: not_started
+      file: agent/tasks/milestone-1-project-scaffold-data-pipeline/task-1-initialize-tanstack-start-project.md
+      estimated_hours: "2"
+      completed_date: null
+      notes: Scaffold project with Vite, Tailwind, all P0 deps
+
+    - id: task_2
+      name: Implement Data Model & YAML Parser
+      status: not_started
+      file: agent/tasks/milestone-1-project-scaffold-data-pipeline/task-2-implement-data-model-yaml-parser.md
+      estimated_hours: "3"
+      completed_date: null
+      notes: Types, lenient parsing, agent-drift handling
+
+    - id: task_3
+      name: Build Server API & Data Loading
+      status: not_started
+      file: agent/tasks/milestone-1-project-scaffold-data-pipeline/task-3-build-server-api-data-loading.md
+      estimated_hours: "2"
+      completed_date: null
+      notes: ProgressDatabaseService, beforeLoad SSR
+
+    - id: task_4
+      name: Add Auto-Refresh via SSE
+      status: not_started
+      file: agent/tasks/milestone-1-project-scaffold-data-pipeline/task-4-add-auto-refresh-sse.md
+      estimated_hours: "2"
+      completed_date: null
+      notes: File watcher, SSE endpoint, useAutoRefresh hook
+
+  milestone_2:
+    - id: task_5
+      name: Build Dashboard Layout & Routing
+      status: not_started
+      file: agent/tasks/milestone-2-dashboard-views-interaction/task-5-build-dashboard-layout-routing.md
+      estimated_hours: "3"
+      completed_date: null
+      notes: Root layout, sidebar, header, design tokens
+
+    - id: task_6
+      name: Build Overview Page
+      status: not_started
+      file: agent/tasks/milestone-2-dashboard-views-interaction/task-6-build-overview-page.md
+      estimated_hours: "2"
+      completed_date: null
+      notes: Project summary dashboard
+
+    - id: task_7
+      name: Implement Milestone Table View
+      status: not_started
+      file: agent/tasks/milestone-2-dashboard-views-interaction/task-7-implement-milestone-table-view.md
+      estimated_hours: "3"
+      completed_date: null
+      notes: "@tanstack/react-table with sorting, row expansion"
+
+    - id: task_8
+      name: Implement Milestone Tree View
+      status: not_started
+      file: agent/tasks/milestone-2-dashboard-views-interaction/task-8-implement-milestone-tree-view.md
+      estimated_hours: "2"
+      completed_date: null
+      notes: Expandable hierarchy, useCollapse animation
+
+    - id: task_9
+      name: Implement Search & Filtering
+      status: not_started
+      file: agent/tasks/milestone-2-dashboard-views-interaction/task-9-implement-search-filtering.md
+      estimated_hours: "3"
+      completed_date: null
+      notes: Fuse.js, GlobalSearchContext, FilterBar
+
+    - id: task_10
+      name: Polish & Integration Testing
+      status: not_started
+      file: agent/tasks/milestone-2-dashboard-views-interaction/task-10-polish-integration-testing.md
+      estimated_hours: "2"
+      completed_date: null
+      notes: Error states, empty states, end-to-end verification
 
 documentation:
-  design_documents: 0
-  milestone_documents: 0
-  pattern_documents: 0
-  task_documents: 0
+  design_documents: 6
+  milestone_documents: 2
+  pattern_documents: 42
+  task_documents: 10
 
 progress:
-  planning: 0
+  planning: 100
   implementation: 0
-  overall: 0
+  overall: 10
 
-recent_work: []
+recent_work:
+  - date: "2026-03-14"
+    description: Project planning complete
+    items:
+      - Created requirements document (local.visualizer-requirements.md)
+      - Created 5 functional design documents with pattern references
+      - Installed tanstack-cloudflare package (42 patterns)
+      - Planned 2 milestones with 10 tasks
+      - Created milestone and task documents
 
 next_steps:
-  - Define project requirements in agent/design/requirements.md
-  - Plan milestones and tasks with @acp.plan
-  - Start development with @acp.proceed
+  - "Start M1: Initialize TanStack Start project (task-1)"
+  - "Implement data model and YAML parser (task-2)"
+  - "Build server API with SSR data loading (task-3)"
 
 notes: []
 
