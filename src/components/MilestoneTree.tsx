@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import { ChevronDown, ChevronRight } from 'lucide-react'
 import { StatusBadge } from './StatusBadge'
 import { ProgressBar } from './ProgressBar'
@@ -35,7 +36,14 @@ function MilestoneTreeRow({
         ) : (
           <ChevronRight className="w-4 h-4 text-gray-500 shrink-0" />
         )}
-        <span className="flex-1 text-sm font-medium">{milestone.name}</span>
+        <Link
+          to="/milestones/$milestoneId"
+          params={{ milestoneId: milestone.id }}
+          className="flex-1 text-sm font-medium hover:text-blue-400 transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {milestone.name}
+        </Link>
         <StatusBadge status={milestone.status} />
         <div className="w-20">
           <ProgressBar value={milestone.progress} size="sm" />

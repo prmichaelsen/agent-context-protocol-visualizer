@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { StatusDot } from './StatusDot'
 import { ExtraFieldsBadge } from './ExtraFieldsBadge'
 import type { Task } from '../lib/types'
@@ -16,13 +17,15 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
       {tasks.map((task) => (
         <div key={task.id} className="flex items-center gap-2 py-1 text-sm">
           <StatusDot status={task.status} />
-          <span
-            className={
+          <Link
+            to="/tasks/$taskId"
+            params={{ taskId: task.id }}
+            className={`hover:text-blue-400 transition-colors ${
               task.status === 'completed' ? 'text-gray-500' : 'text-gray-200'
-            }
+            }`}
           >
             {task.name}
-          </span>
+          </Link>
           {task.notes && (
             <span className="text-xs text-gray-600 ml-auto truncate max-w-[200px]">
               {task.notes}

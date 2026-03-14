@@ -2,7 +2,7 @@ project:
   name: agent-context-protocol-visualizer
   version: 0.1.0
   started: 2026-03-14
-  status: in_progress
+  status: completed
   current_milestone: milestone_3
   description: |
     Browser-based read-only dashboard for visualizing ACP progress.yaml data.
@@ -33,12 +33,13 @@ milestones:
 
   - id: milestone_3
     name: Detail Views
-    status: not_started
-    progress: 50
+    status: completed
+    progress: 100
     started: "2026-03-14"
+    completed: "2026-03-14"
     completed: null
     estimated_weeks: "1"
-    tasks_completed: 2
+    tasks_completed: 4
     tasks_total: 4
     notes: P1 — clickable milestone/task detail pages with markdown rendering
 
@@ -144,18 +145,18 @@ tasks:
 
     - id: task_13
       name: Implement Detail Page Routes
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-3-detail-views/task-13-detail-page-routes.md
       estimated_hours: "4"
-      completed_date: null
+      completed_date: "2026-03-14"
       notes: /milestones/$milestoneId and /tasks/$taskId routes with metadata headers
 
     - id: task_14
       name: Integrate Navigation Links
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-3-detail-views/task-14-navigation-links.md
       estimated_hours: "2"
-      completed_date: null
+      completed_date: "2026-03-14"
       notes: Make titles clickable links in table, tree, kanban, and task list views
 
 documentation:
@@ -166,10 +167,19 @@ documentation:
 
 progress:
   planning: 100
-  implementation: 86
-  overall: 86
+  implementation: 100
+  overall: 100
 
 recent_work:
+  - date: "2026-03-14"
+    description: "M3 complete: detail views with markdown rendering"
+    items:
+      - "Task 13: /milestones/$milestoneId and /tasks/$taskId detail routes"
+      - "Task 14: Title links in MilestoneTable, MilestoneTree, MilestoneKanban, TaskList"
+      - "Breadcrumb and DetailHeader shared components"
+      - "Prev/next sibling navigation on task detail pages"
+      - "Milestone detail shows linked task list"
+
   - date: "2026-03-14"
     description: "M3 Tasks 11-12: markdown rendering & loading service"
     items:
@@ -197,9 +207,9 @@ recent_work:
       - Created milestone and task documents
 
 next_steps:
-  - "Start M3 Task 11: Install markdown dependencies & build MarkdownContent component"
-  - "Complete M3: Detail Views (4 tasks, ~11 hours estimated)"
-  - "Test detail views with remember-core progress.yaml"
+  - "M3 complete — test detail views with remember-core progress.yaml"
+  - "Plan P2 features: Gantt timeline, task dependencies"
+  - "Consider P1 additions: activity timeline detail, design doc views"
 
 notes: []
 

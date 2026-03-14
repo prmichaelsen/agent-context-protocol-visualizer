@@ -1,3 +1,4 @@
+import { Link } from '@tanstack/react-router'
 import { StatusBadge } from './StatusBadge'
 import { ProgressBar } from './ProgressBar'
 import { TaskList } from './TaskList'
@@ -29,7 +30,13 @@ function KanbanCard({
   return (
     <div className="bg-gray-900/50 border border-gray-800 rounded-lg p-3 hover:border-gray-700 transition-colors">
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h4 className="text-sm font-medium leading-tight">{milestone.name}</h4>
+        <Link
+          to="/milestones/$milestoneId"
+          params={{ milestoneId: milestone.id }}
+          className="text-sm font-medium leading-tight hover:text-blue-400 transition-colors"
+        >
+          {milestone.name}
+        </Link>
       </div>
       <div className="flex items-center gap-2 mb-2">
         <div className="flex-1">

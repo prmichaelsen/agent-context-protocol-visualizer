@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react'
+import { Link } from '@tanstack/react-router'
 import {
   createColumnHelper,
   useReactTable,
@@ -52,7 +53,14 @@ export function MilestoneTable({ milestones, tasks }: MilestoneTableProps) {
     columnHelper.accessor('name', {
       header: 'Milestone',
       cell: (info) => (
-        <span className="text-sm font-medium">{info.getValue()}</span>
+        <Link
+          to="/milestones/$milestoneId"
+          params={{ milestoneId: info.row.original.id }}
+          className="text-sm font-medium text-gray-200 hover:text-blue-400 transition-colors"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {info.getValue()}
+        </Link>
       ),
     }),
     columnHelper.accessor('status', {
