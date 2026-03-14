@@ -1,6 +1,6 @@
 {
   "name": "@prmichaelsen/acp-visualizer",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "type": "module",
   "description": "Browser-based dashboard for visualizing ACP progress.yaml data",
   "bin": {
@@ -35,6 +35,7 @@
     "lucide-react": "^0.544.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "recharts": "^3.8.0",
     "tailwindcss": "^4.0.6",
     "typescript": "^5.7.2",
     "vite": "^7.1.7",

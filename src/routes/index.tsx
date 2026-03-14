@@ -1,6 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { StatusBadge } from '../components/StatusBadge'
 import { ProgressBar } from '../components/ProgressBar'
+import { BurndownChart } from '../components/BurndownChart'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
@@ -77,6 +78,9 @@ function HomePage() {
           )}
         </div>
       </div>
+
+      {/* Burndown Chart */}
+      <BurndownChart data={data} />
 
       {/* Next Steps */}
       {data.next_steps.length > 0 && (
