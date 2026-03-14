@@ -1,4 +1,5 @@
 import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-router'
+import { useAutoRefresh } from '@/lib/useAutoRefresh'
 
 import appCss from '../styles.css?url'
 
@@ -24,6 +25,11 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
+function AutoRefresh() {
+  useAutoRefresh()
+  return null
+}
+
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -31,6 +37,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <AutoRefresh />
         {children}
         <Scripts />
       </body>

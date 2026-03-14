@@ -11,12 +11,12 @@ project:
 milestones:
   - id: milestone_1
     name: Project Scaffold & Data Pipeline
-    status: in_progress
-    progress: 75
+    status: completed
+    progress: 100
     started: "2026-03-14"
-    completed: null
+    completed: "2026-03-14"
     estimated_weeks: "1"
-    tasks_completed: 3
+    tasks_completed: 4
     tasks_total: 4
     notes: Foundation milestone — all subsequent work depends on this data pipeline
 
@@ -60,10 +60,10 @@ tasks:
 
     - id: task_4
       name: Add Auto-Refresh via SSE
-      status: not_started
+      status: completed
       file: agent/tasks/milestone-1-project-scaffold-data-pipeline/task-4-add-auto-refresh-sse.md
       estimated_hours: "2"
-      completed_date: null
+      completed_date: "2026-03-14"
       notes: File watcher, SSE endpoint, useAutoRefresh hook
 
   milestone_2:
