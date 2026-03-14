@@ -5,6 +5,7 @@ const statusOptions: Array<{ value: Status | 'all'; label: string }> = [
   { value: 'in_progress', label: 'In Progress' },
   { value: 'not_started', label: 'Not Started' },
   { value: 'completed', label: 'Completed' },
+  { value: 'wont_do', label: "Won't Do" },
 ]
 
 interface FilterBarProps {

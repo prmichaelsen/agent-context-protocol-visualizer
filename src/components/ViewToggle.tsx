@@ -1,4 +1,4 @@
-export type ViewMode = 'table' | 'tree' | 'kanban'
+export type ViewMode = 'table' | 'tree' | 'kanban' | 'gantt'
 
 interface ViewToggleProps {
   value: ViewMode
@@ -9,6 +9,7 @@ const views: Array<{ id: ViewMode; label: string }> = [
   { id: 'table', label: 'Table' },
   { id: 'tree', label: 'Tree' },
   { id: 'kanban', label: 'Kanban' },
+  { id: 'gantt', label: 'Gantt' },
 ]
 
 export function ViewToggle({ value, onChange }: ViewToggleProps) {

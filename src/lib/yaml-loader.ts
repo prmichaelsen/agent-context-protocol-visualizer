@@ -47,6 +47,7 @@ function normalizeStatus(value: unknown): Status {
     .replace(/[\s-]/g, '_')
   if (s === 'completed' || s === 'done' || s === 'complete') return 'completed'
   if (s === 'in_progress' || s === 'active' || s === 'wip' || s === 'started') return 'in_progress'
+  if (s === 'wont_do' || s === 'won_t_do' || s === 'skipped' || s === 'cancelled' || s === 'canceled') return 'wont_do'
   return 'not_started'
 }
 
@@ -56,7 +57,9 @@ function safeString(value: unknown, fallback = ''): string {
 }
 
 function safeNumber(value: unknown, fallback = 0): number {
-  const n = Number(value)
+  // Strip trailing '%' (e.g. "100%" → "100") before parsing
+  const cleaned = typeof value === 'string' ? value.replace(/%$/, '') : value
+  const n = Number(cleaned)
   return Number.isFinite(n) ? n : fallback
 }
 
@@ -267,6 +270,84 @@ const EMPTY_PROGRESS_DATA: ProgressData = {
   progress: { planning: 0, implementation: 0, overall: 0 },
 }
 
+// --- Inline milestone extraction ---
+// Some progress.yaml files use top-level keys like `milestone_1_firebase_analytics:`
+// containing milestone metadata + inline `tasks:` arrays.
+
+const INLINE_MILESTONE_PATTERN = /^milestone_(\d+)_/
+
+function extractInlineMilestones(d: Record<string, unknown>): {
+  milestones: Milestone[]
+  tasks: Record<string, Task[]>
+} {
+  const milestones: Milestone[] = []
+  const tasks: Record<string, Task[]> = {}
+
+  for (const [key, value] of Object.entries(d)) {
+    const match = key.match(INLINE_MILESTONE_PATTERN)
+    if (!match) continue
+    const obj = asRecord(value)
+    // Extract milestone ID from the name field (e.g. "M1 - ...") or synthesize from key
+    const nameStr = safeString(obj.name)
+    const idFromName = nameStr.match(/^(M\d+)\b/)?.[1]
+    const milestoneId = idFromName || `M${match[1]}`
+
+    const milestone = normalizeMilestone(
+      { ...obj, id: milestoneId },
+      milestones.length,
+    )
+    milestones.push(milestone)
+
+    // Extract inline tasks if present
+    if (Array.isArray(obj.tasks)) {
+      tasks[milestoneId] = obj.tasks.map((t, i) =>
+        normalizeTask(t, milestoneId, i),
+      )
+    }
+  }
+
+  return { milestones, tasks }
+}
+
+// --- Standalone / unassigned task extraction ---
+
+function extractLooseTasks(
+  d: Record<string, unknown>,
+  keys: string[],
+): Task[] {
+  const result: Task[] = []
+  for (const key of keys) {
+    const arr = d[key]
+    if (Array.isArray(arr)) {
+      result.push(
+        ...arr.map((t, i) => normalizeTask(t, '_unassigned', result.length + i)),
+      )
+    }
+  }
+  return result
+}
+
+// --- next_steps from multiple sources ---
+
+function collectNextSteps(d: Record<string, unknown>): string[] {
+  const steps = normalizeStringArray(d.next_steps)
+  // next_immediate_steps may be a structured object with sub-keys or an array
+  const immediate = d.next_immediate_steps
+  if (immediate) {
+    if (Array.isArray(immediate)) {
+      steps.push(...immediate.map(String))
+    } else if (typeof immediate === 'object' && immediate !== null) {
+      // Structured object like { ready_to_implement: [...], security: [...] }
+      for (const arr of Object.values(immediate)) {
+        if (Array.isArray(arr)) {
+          steps.push(...arr.map(String))
+        }
+      }
+    }
+  }
+  return steps
+}
+
 export function parseProgressYaml(raw: string): ProgressData {
   try {
     // json: true allows duplicated keys (last wins) — common in agent-maintained YAML
@@ -276,14 +357,62 @@ export function parseProgressYaml(raw: string): ProgressData {
     }
     const d = doc as Record<string, unknown>
 
-    const milestones = normalizeMilestones(d.milestones)
+    // Standard milestones array
+    const standardMilestones = normalizeMilestones(d.milestones)
+
+    // Inline milestone_N_* top-level keys
+    const inline = extractInlineMilestones(d)
+
+    // Merge: inline milestones first (they tend to be older/lower-numbered),
+    // then standard milestones. Deduplicate by ID (standard wins).
+    const seenIds = new Set<string>()
+    const allMilestones: Milestone[] = []
+    for (const m of [...inline.milestones, ...standardMilestones]) {
+      if (!seenIds.has(m.id)) {
+        seenIds.add(m.id)
+        allMilestones.push(m)
+      }
+    }
+
+    // Standard tasks (from top-level `tasks:` key — last-wins with json: true)
+    const standardTasks = normalizeTasks(d.tasks, allMilestones)
+
+    // Merge inline tasks with standard tasks (standard wins on conflict)
+    const allTasks: Record<string, Task[]> = { ...inline.tasks }
+    for (const [key, tasks] of Object.entries(standardTasks)) {
+      allTasks[key] = tasks // standard overwrites inline for same key
+    }
+
+    // Standalone and unassigned tasks
+    const looseTasks = extractLooseTasks(d, ['standalone_tasks', 'unassigned_tasks'])
+    if (looseTasks.length > 0) {
+      const existing = allTasks['_unassigned'] || []
+      allTasks['_unassigned'] = [...existing, ...looseTasks]
+      // Add a synthetic milestone for unassigned tasks if not already present
+      if (!seenIds.has('_unassigned')) {
+        seenIds.add('_unassigned')
+        allMilestones.push({
+          id: '_unassigned',
+          name: 'Unassigned Tasks',
+          status: 'in_progress',
+          progress: 0,
+          started: null,
+          completed: null,
+          estimated_weeks: '0',
+          tasks_completed: looseTasks.filter((t) => t.status === 'completed').length,
+          tasks_total: looseTasks.length,
+          notes: 'Tasks not assigned to a specific milestone',
+          extra: { synthetic: true },
+        })
+      }
+    }
 
     return {
       project: normalizeProject(d.project),
-      milestones,
-      tasks: normalizeTasks(d.tasks, milestones),
+      milestones: allMilestones,
+      tasks: allTasks,
       recent_work: normalizeWorkEntries(d.recent_work),
-      next_steps: normalizeStringArray(d.next_steps),
+      next_steps: collectNextSteps(d),
       notes: normalizeStringArray(d.notes),
       current_blockers: normalizeStringArray(d.current_blockers),
       documentation: normalizeDocStats(d.documentation),

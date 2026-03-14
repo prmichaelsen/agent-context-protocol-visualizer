@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { MilestoneTable } from '../components/MilestoneTable'
 import { MilestoneTree } from '../components/MilestoneTree'
 import { MilestoneKanban } from '../components/MilestoneKanban'
+import { MilestoneGantt } from '../components/MilestoneGantt'
 import { ViewToggle, type ViewMode } from '../components/ViewToggle'
 import { FilterBar } from '../components/FilterBar'
 import { SearchInput } from '../components/SearchInput'
@@ -48,8 +49,10 @@ function MilestonesPage() {
         <MilestoneTable milestones={filtered.milestones} tasks={filtered.tasks} />
       ) : view === 'tree' ? (
         <MilestoneTree milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : (
+      ) : view === 'kanban' ? (
         <MilestoneKanban milestones={filtered.milestones} tasks={filtered.tasks} />
+      ) : (
+        <MilestoneGantt milestones={filtered.milestones} tasks={filtered.tasks} />
       )}
     </div>
   )

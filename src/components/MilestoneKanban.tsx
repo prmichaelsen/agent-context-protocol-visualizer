@@ -9,6 +9,7 @@ const columns: Array<{ status: Status; label: string; color: string }> = [
   { status: 'not_started', label: 'Not Started', color: 'border-gray-600' },
   { status: 'in_progress', label: 'In Progress', color: 'border-blue-500' },
   { status: 'completed', label: 'Completed', color: 'border-green-500' },
+  { status: 'wont_do', label: "Won't Do", color: 'border-yellow-500' },
 ]
 
 interface MilestoneKanbanProps {
@@ -69,7 +70,7 @@ export function MilestoneKanban({ milestones, tasks }: MilestoneKanbanProps) {
   }
 
   return (
-    <div className="grid grid-cols-3 gap-4 min-h-[300px]">
+    <div className="grid grid-cols-4 gap-4 min-h-[300px]">
       {columns.map((col) => {
         const items = milestones.filter((m) => m.status === col.status)
         return (

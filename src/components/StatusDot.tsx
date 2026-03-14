@@ -4,6 +4,7 @@ const dotStyles: Record<Status, { symbol: string; color: string }> = {
   completed: { symbol: '✓', color: 'text-green-400' },
   in_progress: { symbol: '●', color: 'text-blue-400' },
   not_started: { symbol: '○', color: 'text-gray-500' },
+  wont_do: { symbol: '✕', color: 'text-yellow-500' },
 }
 
 export function StatusDot({ status }: { status: Status }) {

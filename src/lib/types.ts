@@ -1,5 +1,5 @@
 /** Status values for milestones and tasks */
-export type Status = 'completed' | 'in_progress' | 'not_started'
+export type Status = 'completed' | 'in_progress' | 'not_started' | 'wont_do'
 
 /** Unknown properties from agent-maintained YAML are preserved here */
 export type ExtraFields = Record<string, unknown>
