@@ -13,6 +13,10 @@ import { ProgressProvider } from '../contexts/ProgressContext'
 import appCss from '../styles.css?url'
 
 export const Route = createRootRoute({
+  component: RootLayout,
+  notFoundComponent: NotFound,
+  shellComponent: RootDocument,
+
   beforeLoad: async () => {
     let progressData: ProgressData | null = null
     let projects: AcpProject[] = []
@@ -26,8 +30,9 @@ export const Route = createRootRoute({
         progressData = result.data
       }
       projects = projectList
-    } catch (error) {
-      console.error('[Root] Failed to load data:', error)
+    } catch {
+      // Deployed on Cloudflare Workers — no local filesystem.
+      // Users load projects via GitHub input or URL params.
     }
 
     return { progressData, projects }
@@ -50,18 +55,28 @@ export const Route = createRootRoute({
       { rel: 'stylesheet', href: appCss },
     ],
   }),
-
-  shellComponent: RootDocument,
 })
+
+function NotFound() {
+  return (
+    <div className="flex items-center justify-center h-full">
+      <div className="text-center">
+        <h2 className="text-xl font-semibold text-gray-200 mb-2">Page Not Found</h2>
+        <p className="text-sm text-gray-400">
+          The page you're looking for doesn't exist.
+        </p>
+      </div>
+    </div>
+  )
+}
 
 function AutoRefresh() {
   useAutoRefresh()
   return null
 }
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootLayout() {
   const context = Route.useRouteContext()
-  const router = useRouter()
   const [progressData, setProgressData] = useState(context.progressData)
   const [currentProject, setCurrentProject] = useState<string | null>(
     context.progressData?.project.name || null,
@@ -87,34 +102,42 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           setCurrentProject(projectId)
         }
       }
-    } catch (error) {
-      console.error('[Root] Failed to switch project:', error)
+    } catch {
+      // Project switch failed — likely no filesystem access
     }
   }, [])
 
+  return (
+    <>
+      <AutoRefresh />
+      <div className="flex h-screen bg-gray-950 text-gray-100">
+        <Sidebar
+          projects={context.projects}
+          currentProject={currentProject}
+          onProjectSelect={handleProjectSwitch}
+          onGitHubLoad={handleGitHubLoad}
+        />
+        <ProgressProvider data={progressData}>
+          <div className="flex-1 flex flex-col overflow-hidden">
+            <Header data={progressData} />
+            <main className="flex-1 overflow-auto">
+              <Outlet />
+            </main>
+          </div>
+        </ProgressProvider>
+      </div>
+    </>
+  )
+}
+
+function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
-        <AutoRefresh />
-        <div className="flex h-screen bg-gray-950 text-gray-100">
-          <Sidebar
-            projects={context.projects}
-            currentProject={currentProject}
-            onProjectSelect={handleProjectSwitch}
-            onGitHubLoad={handleGitHubLoad}
-          />
-          <ProgressProvider data={progressData}>
-            <div className="flex-1 flex flex-col overflow-hidden">
-              <Header data={progressData} />
-              <main className="flex-1 overflow-auto">
-                {children}
-              </main>
-            </div>
-          </ProgressProvider>
-        </div>
+        {children}
         <Scripts />
       </body>
     </html>
