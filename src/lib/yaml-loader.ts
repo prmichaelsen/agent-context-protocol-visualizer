@@ -241,7 +241,8 @@ const EMPTY_PROGRESS_DATA: ProgressData = {
 
 export function parseProgressYaml(raw: string): ProgressData {
   try {
-    const doc = yaml.load(raw)
+    // json: true allows duplicated keys (last wins) — common in agent-maintained YAML
+    const doc = yaml.load(raw, { json: true })
     if (!doc || typeof doc !== 'object') {
       return { ...EMPTY_PROGRESS_DATA }
     }
