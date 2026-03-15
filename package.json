@@ -1,6 +1,6 @@
 {
   "name": "@prmichaelsen/acp-visualizer",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "type": "module",
   "description": "Browser-based dashboard for visualizing ACP progress.yaml data",
   "bin": {
@@ -24,7 +24,8 @@
     "cf-secrets:e1": "tsx scripts/upload-cloudflare-secrets.ts -- --env .env.e1.local",
     "cf-secrets:prod": "tsx scripts/upload-cloudflare-secrets.ts -- --env .env.prod.local",
     "typecheck": "tsc --noEmit",
-    "cf-typegen": "wrangler types"
+    "cf-typegen": "wrangler types",
+    "visualizer": "visualizer"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.28.0",

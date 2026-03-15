@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { StatusBadge } from '../components/StatusBadge'
 import { ProgressBar } from '../components/ProgressBar'
 import { BurndownChart } from '../components/BurndownChart'
+import { EstimateChart } from '../components/EstimateChart'
 import { useProgressData } from '../contexts/ProgressContext'
 
 export const Route = createFileRoute('/')({
@@ -69,32 +70,8 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Milestones Summary */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
-          Milestones ({data.milestones.length})
-        </h3>
-        <div className="space-y-2">
-          {data.milestones.map((m) => (
-            <div
-              key={m.id}
-              className="bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-3 flex items-center gap-4"
-            >
-              <span className="flex-1 text-sm font-medium">{m.name}</span>
-              <StatusBadge status={m.status} />
-              <div className="w-24">
-                <ProgressBar value={m.progress} size="sm" />
-              </div>
-              <span className="text-xs text-gray-500 font-mono w-16 text-right">
-                {m.tasks_completed}/{m.tasks_total}
-              </span>
-            </div>
-          ))}
-          {data.milestones.length === 0 && (
-            <p className="text-gray-600 text-sm">No milestones defined</p>
-          )}
-        </div>
-      </div>
+      {/* Estimated vs Actual */}
+      <EstimateChart data={data} />
 
       {/* Burndown Chart */}
       <BurndownChart data={data} />

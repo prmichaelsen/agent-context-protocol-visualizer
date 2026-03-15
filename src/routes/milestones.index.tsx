@@ -1,5 +1,5 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useState, lazy, Suspense } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { lazy, Suspense, useCallback } from 'react'
 import { MilestoneTable } from '../components/MilestoneTable'
 import { MilestoneTree } from '../components/MilestoneTree'
 import { MilestoneKanban } from '../components/MilestoneKanban'
@@ -10,20 +10,40 @@ import { SearchInput } from '../components/SearchInput'
 import { useFilteredData } from '../lib/useFilteredData'
 import { useProgressData } from '../contexts/ProgressContext'
 import type { Status } from '../lib/types'
+import { z } from 'zod'
 
 // Lazy-load DependencyGraph to keep dagre out of the SSR bundle
 // (dagre uses CommonJS require() which fails on Cloudflare Workers)
 const DependencyGraph = lazy(() => import('../components/DependencyGraph').then(m => ({ default: m.DependencyGraph })))
 
+const viewModes = ['table', 'tree', 'kanban', 'gantt', 'graph'] as const
+const statuses = ['all', 'completed', 'in_progress', 'not_started', 'wont_do'] as const
+
 export const Route = createFileRoute('/milestones/')({
   component: MilestonesPage,
+  validateSearch: z.object({
+    view: z.enum(viewModes).default('tree'),
+    status: z.enum(statuses).default('all'),
+    q: z.string().default(''),
+  }),
 })
 
 function MilestonesPage() {
   const progressData = useProgressData()
-  const [view, setView] = useState<ViewMode>('table')
-  const [status, setStatus] = useState<Status | 'all'>('all')
-  const [search, setSearch] = useState('')
+  const { view, status, q: search } = Route.useSearch()
+  const navigate = useNavigate({ from: Route.fullPath })
+
+  const setView = useCallback((v: ViewMode) => {
+    navigate({ search: (prev) => ({ ...prev, view: v }), replace: true })
+  }, [navigate])
+
+  const setStatus = useCallback((s: Status | 'all') => {
+    navigate({ search: (prev) => ({ ...prev, status: s }), replace: true })
+  }, [navigate])
+
+  const setSearch = useCallback((q: string) => {
+    navigate({ search: (prev) => ({ ...prev, q: q || undefined }), replace: true })
+  }, [navigate])
 
   const filtered = useFilteredData(progressData, { status, search })
 

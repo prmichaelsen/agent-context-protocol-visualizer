@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.8.0] - 2026-03-15
+
+### Added
+- Estimated vs Actual hours chart on overview page (horizontal bar chart per milestone)
+- URL-based view/filter/search state on milestones page via TanStack Router search params
+- Deep links now survive page refresh (e.g. `/milestones?view=kanban&status=in_progress`)
+
+### Changed
+- Default milestones view changed from table to tree
+- Replaced milestones summary list on overview with Estimated vs Actual chart
+
 ## [0.7.0] - 2026-03-14
 
 ### Added
