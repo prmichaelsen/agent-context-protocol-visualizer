@@ -12,9 +12,12 @@
 > - YOU MUST IMMEDIATELY BEGIN IMPLEMENTING THE CURRENT OR NEXT TASK.
 > - Follow **Steps 1-5** (Single-Task Mode).
 >
-> **If autonomous arguments detected (`--complete`, `--auto`, `--autonomous`, `--finish-milestone`, or natural language like "finish milestone", "just finish everything", "complete all tasks"):**
+> **If autonomous arguments detected (`--complete`, `--auto`, `--autonomous`, `--finish-milestone`, `--turbo`, `--yolo`, or natural language like "finish milestone", "just finish everything", "complete all tasks"):**
 > - Follow **Autonomous Mode** section.
-> - Do NOT start implementing individual tasks until confirmation is received.
+> - If `--yes`, `--turbo`, or `--yolo` is present, skip the confirmation prompt (A2).
+> - If `--this` is present (or implied by `--turbo`/`--yolo`), use the task from chat context rather than scanning progress.yaml.
+> - If `--parallel` is present (or implied by `--turbo`/`--yolo`), spin up sub-agents on separate worktrees.
+> - Do NOT start implementing individual tasks until confirmation is received (unless `--yes`).
 >
 > **If `--dry-run` detected:**
 > - Follow **Autonomous Mode > Dry-Run** section.
@@ -65,11 +68,28 @@ This command supports both CLI-style flags and natural language arguments.
 
 **Note**: `--complete` implies `--commit`. There is no autonomous completion mode without per-task commits.
 
-### Other Flags
+### Targeting Flags
 
 | Flag | Description |
 |------|-------------|
+| `--this` | Work on the task already in chat context or implied by the current conversation, rather than scanning progress.yaml for the next task |
+
+### Execution Flags
+
+| Flag | Description |
+|------|-------------|
+| `--parallel` | Spin up sub-agents on separate git worktrees to work on tasks concurrently |
+| `--yes` | Skip the confirmation prompt (A2) and begin execution immediately |
 | `--dry-run` | Preview what tasks would be completed without executing |
+
+### Combo Flags
+
+| Flag | Description |
+|------|-------------|
+| `--turbo` | Shorthand for `--auto --this --parallel --yes` |
+| `--yolo` | Same as `--turbo` |
+
+**`--turbo` / `--yolo` expand to**: autonomous mode, targeting the current/contextual task, parallel worktree sub-agents, no confirmation prompt.
 
 ### Natural Language (Fuzzy Matching)
 
@@ -84,10 +104,12 @@ The agent should detect autonomous intent from natural language following `@acp.
 | `@acp.proceed complete the milestone` | Autonomous |
 | `@acp.proceed complete all tasks` | Autonomous |
 | `@acp.proceed --dry-run` | Dry-Run |
+| `@acp.proceed --turbo` | Autonomous (parallel, no confirm, contextual task) |
+| `@acp.proceed --yolo` | Same as `--turbo` |
 | `@acp.proceed` | Single-Task (default) |
 
 **Matching rules**:
-- Look for keywords: `complete`, `finish`, `auto`, `autonomous`, `all tasks`, `everything`, `milestone`
+- Look for keywords: `complete`, `finish`, `auto`, `autonomous`, `all tasks`, `everything`, `milestone`, `turbo`, `yolo`
 - Be generous with matching — if the user's intent is clearly "do everything", enter autonomous mode
 - When in doubt, **always show the confirmation prompt** before starting autonomous execution
 - Never enter autonomous mode silently — the confirmation gate is mandatory
@@ -97,6 +119,10 @@ The agent should detect autonomous intent from natural language following `@acp.
 | Combination | Behavior |
 |-------------|----------|
 | `--complete` | Autonomous completion with per-task commits |
+| `--complete --yes` | Autonomous completion, skip confirmation prompt |
+| `--complete --parallel` | Autonomous completion with parallel worktree sub-agents |
+| `--complete --this` | Autonomous completion starting from contextual task |
+| `--turbo` / `--yolo` | `--auto --this --parallel --yes` (full autonomous, no confirm, parallel, contextual) |
 | `--complete --dry-run` | Preview task list, no execution |
 | `--dry-run` (alone) | Preview next task only |
 | `--commit` (alone) | Single-task mode, commit after completion |
@@ -160,6 +186,8 @@ When you invoke `@acp.proceed --complete` (or equivalent):
 - Read `agent/progress.yaml`
 - Find first task with status `in_progress` or `not_started` in the current milestone
 - Read the task document
+- If the task's status is `not_started`, set it to `in_progress` in progress.yaml
+- **Set `started` timestamp**: If the task's `started` field is `null` or missing, set it to the current ISO 8601 timestamp (e.g., `2026-03-14T10:30:00Z`). Do NOT overwrite an existing `started` value.
 
 **DO NOT spend time analyzing or planning. MOVE TO STEP 2 IMMEDIATELY.**
 
@@ -287,7 +315,8 @@ Design Context: No design document found for this task.
 **Only after verifying all deliverables**, update `agent/progress.yaml`:
 - Mark task as `completed` (if done) or `in_progress` (if partial)
 - Add completion date (if done)
-- **Ask user for actual hours spent**: "How many hours did this task take? (estimated: X hours)" - Update `actual_hours` field
+- **Set `completed_date`** to the current ISO 8601 timestamp (e.g., `2026-03-14T14:45:00Z`)
+- **Auto-compute `actual_hours`**: If both `started` and `completed_date` are set, calculate `actual_hours = (completed_date - started)` in hours, rounded to 1 decimal place. If `started` is missing, set `actual_hours` to `null`.
 - Update milestone progress percentage
 - Add `recent_work` entry describing what was IMPLEMENTED
 - Update `next_steps`
@@ -401,7 +430,9 @@ FOR each remaining task in planned order:
 
   6. UPDATE progress tracking
      - Mark task as completed in progress.yaml
-     - Add completion date
+     - Set `completed_date` to current ISO 8601 timestamp
+     - If `started` is `null` or missing, set `started` to current timestamp (same as completed_date)
+     - Auto-compute `actual_hours` from `(completed_date - started)` in hours
      - Update milestone progress percentage
      - Add recent_work entry
 
