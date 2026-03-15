@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.8.1] - 2026-03-15
+
+### Fixed
+- Markdown tables not rendering — add remark-gfm plugin to react-markdown
+
 ## [0.8.0] - 2026-03-15
 
 ### Added

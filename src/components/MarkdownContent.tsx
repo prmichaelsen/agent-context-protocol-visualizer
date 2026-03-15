@@ -1,5 +1,6 @@
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
+import remarkGfm from 'remark-gfm'
 import { Link } from '@tanstack/react-router'
 import type { ProgressData } from '../lib/types'
 
@@ -83,7 +84,7 @@ export function MarkdownContent({ content, className, basePath, linkMap }: Markd
         prose-blockquote:border-gray-700 prose-blockquote:text-gray-400
         ${className ?? ''}`}
     >
-      <ReactMarkdown rehypePlugins={[rehypeHighlight]} components={components}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeHighlight]} components={components}>
         {content}
       </ReactMarkdown>
     </div>
