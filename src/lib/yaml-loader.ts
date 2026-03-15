@@ -388,20 +388,28 @@ export function parseProgressYaml(raw: string): ProgressData {
     if (looseTasks.length > 0) {
       const existing = allTasks['_unassigned'] || []
       allTasks['_unassigned'] = [...existing, ...looseTasks]
-      // Add a synthetic milestone for unassigned tasks if not already present
-      if (!seenIds.has('_unassigned')) {
-        seenIds.add('_unassigned')
+    }
+
+    // Create synthetic milestones for any task keys without a matching milestone.
+    // This handles `unassigned:` (or any other key) inside the `tasks:` object
+    // that doesn't correspond to a declared milestone.
+    for (const key of Object.keys(allTasks)) {
+      if (!seenIds.has(key)) {
+        seenIds.add(key)
+        const tasks = allTasks[key]
+        const isUnassigned = key === '_unassigned' || key.toLowerCase() === 'unassigned'
+        const displayName = isUnassigned ? 'Unassigned Tasks' : key
         allMilestones.push({
-          id: '_unassigned',
-          name: 'Unassigned Tasks',
+          id: key,
+          name: displayName,
           status: 'in_progress',
           progress: 0,
           started: null,
           completed: null,
           estimated_weeks: '0',
-          tasks_completed: looseTasks.filter((t) => t.status === 'completed').length,
-          tasks_total: looseTasks.length,
-          notes: 'Tasks not assigned to a specific milestone',
+          tasks_completed: tasks.filter((t) => t.status === 'completed').length,
+          tasks_total: tasks.length,
+          notes: isUnassigned ? 'Tasks not assigned to a specific milestone' : `Tasks under "${key}"`,
           extra: { synthetic: true },
         })
       }
