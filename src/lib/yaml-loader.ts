@@ -8,6 +8,7 @@ import type {
   DocumentationStats,
   ProgressSummary,
   Status,
+  Priority,
   ExtraFields,
 } from './types'
 
@@ -49,6 +50,14 @@ function normalizeStatus(value: unknown): Status {
   if (s === 'in_progress' || s === 'active' || s === 'wip' || s === 'started') return 'in_progress'
   if (s === 'wont_do' || s === 'won_t_do' || s === 'skipped' || s === 'cancelled' || s === 'canceled') return 'wont_do'
   return 'not_started'
+}
+
+function normalizePriority(value: unknown): Priority {
+  const s = String(value || 'medium').toLowerCase()
+  if (s === 'critical') return 'critical'
+  if (s === 'high') return 'high'
+  if (s === 'low') return 'low'
+  return 'medium'
 }
 
 function safeString(value: unknown, fallback = ''): string {
@@ -127,7 +136,7 @@ function normalizeProject(raw: unknown): ProjectMetadata {
 }
 
 const MILESTONE_KEYS = [
-  'id', 'name', 'status', 'progress', 'started', 'completed',
+  'id', 'name', 'priority', 'file', 'status', 'progress', 'started', 'completed',
   'estimated_weeks', 'tasks_completed', 'tasks_total', 'notes',
 ]
 
@@ -137,6 +146,8 @@ function normalizeMilestone(raw: unknown, index: number): Milestone {
   return {
     id: safeString(known.id, `milestone_${index + 1}`),
     name: safeString(known.name, `Milestone ${index + 1}`),
+    priority: normalizePriority(known.priority),
+    file: safeString(known.file),
     status: normalizeStatus(known.status),
     progress: known.progress != null
       ? safeNumber(known.progress)
@@ -154,13 +165,25 @@ function normalizeMilestone(raw: unknown, index: number): Milestone {
 }
 
 function normalizeMilestones(raw: unknown): Milestone[] {
-  if (!Array.isArray(raw)) return []
-  return raw.map((item, i) => normalizeMilestone(item, i))
+  // v6 format: milestones is a map keyed by ID (e.g. { M1: {...}, M2: {...} })
+  if (raw && typeof raw === 'object' && !Array.isArray(raw)) {
+    const obj = raw as Record<string, unknown>
+    return Object.entries(obj).map(([key, value], i) => {
+      const m = normalizeMilestone(value, i)
+      // The map key IS the milestone ID — override whatever was parsed
+      return { ...m, id: key }
+    })
+  }
+  // Pre-v6 format: milestones is an array
+  if (Array.isArray(raw)) {
+    return raw.map((item, i) => normalizeMilestone(item, i))
+  }
+  return []
 }
 
 const TASK_KEYS = [
-  'id', 'name', 'status', 'milestone_id', 'file',
-  'estimated_hours', 'completed_date', 'notes',
+  'id', 'name', 'priority', 'status', 'milestone_id', 'file',
+  'estimated_hours', 'actual_hours', 'started', 'completed_date', 'notes',
 ]
 
 function normalizeTask(raw: unknown, milestoneId: string, index: number): Task {
@@ -169,10 +192,13 @@ function normalizeTask(raw: unknown, milestoneId: string, index: number): Task {
   return {
     id: safeString(known.id, `task_${index + 1}`),
     name: safeString(known.name, `Task ${index + 1}`),
+    priority: normalizePriority(known.priority),
     status: normalizeStatus(known.status),
     milestone_id: safeString(known.milestone_id, milestoneId),
     file: safeString(known.file),
     estimated_hours: safeString(known.estimated_hours, '0'),
+    actual_hours: known.actual_hours != null ? safeNumber(known.actual_hours) : null,
+    started: known.started ? safeString(known.started) : null,
     completed_date: known.completed_date ? safeString(known.completed_date) : null,
     notes: safeString(known.notes),
     extra,
@@ -402,6 +428,8 @@ export function parseProgressYaml(raw: string): ProgressData {
         allMilestones.push({
           id: key,
           name: displayName,
+          priority: 'medium',
+          file: '',
           status: 'in_progress',
           progress: 0,
           started: null,

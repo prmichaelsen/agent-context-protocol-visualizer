@@ -50,7 +50,7 @@ milestones:
     started: null
     completed: null
     estimated_weeks: "0.5"
-    tasks_completed: 0
+    tasks_completed: 1
     tasks_total: 3
     notes: Update parser and UI to handle ACP 6.0.0 map-based milestones, priority field
 
@@ -173,12 +173,12 @@ tasks:
   milestone_4:
     - id: task_15
       name: Update Data Model and Parser for Map-Based Milestones
-      status: not_started
-      started: null
+      status: completed
+      started: "2026-03-17T12:00:00Z"
       file: agent/tasks/milestone-4-acp-6-compatibility/task-15-update-data-model-and-parser.md
       estimated_hours: "3-4"
-      actual_hours: null
-      completed_date: null
+      actual_hours: 0.5
+      completed_date: "2026-03-17T12:30:00Z"
       notes: Map-based milestones, priority field, backward compat
 
     - id: task_16

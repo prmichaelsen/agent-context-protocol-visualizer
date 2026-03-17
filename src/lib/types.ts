@@ -1,6 +1,9 @@
 /** Status values for milestones and tasks */
 export type Status = 'completed' | 'in_progress' | 'not_started' | 'wont_do'
 
+/** Priority values for milestones and tasks (ACP 6.0.0+) */
+export type Priority = 'critical' | 'high' | 'medium' | 'low'
+
 /** Unknown properties from agent-maintained YAML are preserved here */
 export type ExtraFields = Record<string, unknown>
 
@@ -29,6 +32,8 @@ export interface ProjectMetadata {
 export interface Milestone {
   id: string
   name: string
+  priority: Priority
+  file: string
   status: Status
   progress: number // 0-100
   started: string | null
@@ -43,10 +48,13 @@ export interface Milestone {
 export interface Task {
   id: string
   name: string
+  priority: Priority
   status: Status
   milestone_id: string
   file: string
   estimated_hours: string
+  actual_hours: number | null
+  started: string | null
   completed_date: string | null
   notes: string
   extra: ExtraFields
