@@ -6,6 +6,11 @@ import { TaskPreview } from './TaskPreview'
 export function SidePanel() {
   const { content, isOpen, close } = useSidePanel()
 
+  // Don't render at all until first open
+  if (!content && !isOpen) {
+    return null
+  }
+
   return (
     <>
       {/* Backdrop */}
@@ -18,8 +23,8 @@ export function SidePanel() {
 
       {/* Panel */}
       <div
-        className={`fixed top-0 right-0 h-full w-full max-w-2xl bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl z-50 transition-transform duration-300 overflow-auto ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
+        className={`fixed top-0 right-0 h-full w-full max-w-2xl bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 shadow-2xl z-50 transition-transform duration-300 overflow-auto translate-x-full ${
+          isOpen ? '!translate-x-0' : ''
         }`}
       >
         {/* Header */}
