@@ -1,0 +1,65 @@
+name: Deploy to Cloudflare Workers
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check if version changed
+        id: version
+        run: |
+          CURRENT=$(node -p "require('./package.json').version")
+          PREVIOUS=$(git show HEAD~1:package.json 2>/dev/null | node -p "JSON.parse(require('fs').readFileSync('/dev/stdin','utf8')).version" 2>/dev/null || echo "")
+          if [ "$CURRENT" != "$PREVIOUS" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "version=$CURRENT" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build for Cloudflare
+        if: steps.version.outputs.changed == 'true'
+        run: VITE_HOSTED=true npm run build
+        env:
+          # Add any required environment variables here
+          # These should be set as GitHub repository secrets
+          VITE_GITHUB_TOKEN: ${{ secrets.VITE_GITHUB_TOKEN }}
+
+      - name: Deploy to Cloudflare Workers
+        if: steps.version.outputs.changed == 'true'
+        run: npx wrangler deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Summary
+        if: steps.version.outputs.changed == 'true'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          echo "::notice::Deployed @prmichaelsen/acp-visualizer@${VERSION} to Cloudflare Workers"
+          echo "## Deployed to Cloudflare Workers" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Version**: \`${VERSION}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "**Status**: ✅ Deployed successfully" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Skip
+        if: steps.version.outputs.changed != 'true'
+        run: |
+          echo "::notice::Version unchanged, skipping deployment"
+          echo "## Deployment skipped" >> "$GITHUB_STEP_SUMMARY"
+          echo "Version unchanged from previous commit." >> "$GITHUB_STEP_SUMMARY"

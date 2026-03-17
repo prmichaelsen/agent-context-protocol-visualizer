@@ -14,6 +14,10 @@
 - Detail pages now use responsive padding (p-4 on mobile, p-6 on desktop)
 - Task prev/next navigation now includes gap and truncate for better mobile UX
 - Sidebar now slides in as drawer on mobile with backdrop overlay
+- Menu button moved to bottom-right corner (thumb zone) for better one-handed mobile use
+- Menu button styled as floating action button (FAB) with increased touch target
+- All input fields now use minimum 16px font size to prevent iOS Safari auto-zoom
+- Search and GitHub input fields resized with better spacing and icon positioning
 
 ## [0.9.2] - 2026-03-17
 
