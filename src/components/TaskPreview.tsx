@@ -1,7 +1,8 @@
 import { Link } from '@tanstack/react-router'
 import { useState, useEffect, useMemo } from 'react'
-import { ExternalLink } from 'lucide-react'
+import { Maximize2 } from 'lucide-react'
 import { useProgressData } from '../contexts/ProgressContext'
+import { useSidePanel } from '../contexts/SidePanelContext'
 import { DetailHeader } from './DetailHeader'
 import { PriorityBadge } from './PriorityBadge'
 import { MarkdownContent, buildLinkMap } from './MarkdownContent'
@@ -25,6 +26,7 @@ function getGitHubParams(): { owner: string; repo: string } | undefined {
 
 export function TaskPreview({ taskId }: TaskPreviewProps) {
   const data = useProgressData()
+  const { close } = useSidePanel()
   const [markdown, setMarkdown] = useState<string | null>(null)
   const [markdownError, setMarkdownError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
@@ -116,8 +118,9 @@ export function TaskPreview({ taskId }: TaskPreviewProps) {
           params={{ taskId }}
           className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           title="Open full view"
+          onClick={close}
         >
-          <ExternalLink className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+          <Maximize2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
         </Link>
       </div>
 
