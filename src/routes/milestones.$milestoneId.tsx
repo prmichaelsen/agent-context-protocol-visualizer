@@ -8,6 +8,7 @@ import { StatusDot } from '../components/StatusDot'
 import { PriorityBadge } from '../components/PriorityBadge'
 import { MarkdownContent, buildLinkMap } from '../components/MarkdownContent'
 import { getMarkdownContent, resolveMilestoneFile } from '../services/markdown.service'
+import { formatMilestoneName, formatTaskName } from '../lib/display'
 import type { MarkdownResult, ResolveFileResult } from '../services/markdown.service'
 
 export const Route = createFileRoute('/milestones/$milestoneId')({
@@ -93,11 +94,11 @@ function MilestoneDetailPage() {
       <Breadcrumb
         items={[
           { label: 'Milestones', href: '/milestones' },
-          { label: `${milestone.id.replace('milestone_', 'M')} — ${milestone.name}` },
+          { label: formatMilestoneName(milestone) },
         ]}
       />
 
-      <h1 className="text-xl font-semibold text-gray-100 mb-3">{milestone.name}</h1>
+      <h1 className="text-xl font-semibold text-gray-100 dark:text-gray-100 mb-3">{formatMilestoneName(milestone)}</h1>
 
       <div className="flex items-center gap-3 mb-4">
         <div className="flex-1 max-w-xs">
@@ -133,21 +134,21 @@ function MilestoneDetailPage() {
           <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">
             Tasks
           </h2>
-          <div className="bg-gray-900/50 border border-gray-800 rounded-xl divide-y divide-gray-800">
+          <div className="bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-xl divide-y divide-gray-200 dark:divide-gray-800">
             {tasks.map((task) => (
               <Link
                 key={task.id}
                 to="/tasks/$taskId"
                 params={{ taskId: task.id }}
-                className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-gray-800/50 transition-colors first:rounded-t-xl last:rounded-b-xl"
+                className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-gray-200/50 dark:hover:bg-gray-800/50 transition-colors first:rounded-t-xl last:rounded-b-xl"
               >
                 <StatusDot status={task.status} />
-                <span className={task.status === 'completed' ? 'text-gray-500' : 'text-gray-200'}>
-                  {task.name}
+                <span className={task.status === 'completed' ? 'text-gray-500 dark:text-gray-500' : 'text-gray-900 dark:text-gray-200'}>
+                  {formatTaskName(task)}
                 </span>
                 <PriorityBadge priority={task.priority} />
                 {task.estimated_hours && (
-                  <span className="text-xs text-gray-600 ml-auto">{task.estimated_hours}h</span>
+                  <span className="text-xs text-gray-600 dark:text-gray-600 ml-auto">{task.estimated_hours}h</span>
                 )}
               </Link>
             ))}

@@ -7,6 +7,7 @@ import { PriorityBadge } from '../components/PriorityBadge'
 import { MarkdownContent, buildLinkMap } from '../components/MarkdownContent'
 import { getMarkdownContent } from '../services/markdown.service'
 import { resolveTaskFile } from '../services/markdown.service'
+import { formatTaskName, formatMilestoneName } from '../lib/display'
 import type { MarkdownResult } from '../services/markdown.service'
 
 export const Route = createFileRoute('/tasks/$taskId')({
@@ -109,9 +110,9 @@ function TaskDetailPage() {
         <Link
           to="/milestones/$milestoneId"
           params={{ milestoneId: milestone.id }}
-          className="text-blue-400 hover:underline"
+          className="text-blue-500 dark:text-blue-400 hover:underline"
         >
-          {milestone.id.replace('milestone_', 'M')} — {milestone.name}
+          {formatMilestoneName(milestone)}
         </Link>
       ),
     },
@@ -122,12 +123,12 @@ function TaskDetailPage() {
       <Breadcrumb
         items={[
           { label: 'Milestones', href: '/milestones' },
-          { label: `${milestone.id.replace('milestone_', 'M')} — ${milestone.name}`, href: `/milestones/${milestone.id}` },
-          { label: task.name },
+          { label: formatMilestoneName(milestone), href: `/milestones/${milestone.id}` },
+          { label: formatTaskName(task) },
         ]}
       />
 
-      <h1 className="text-xl font-semibold text-gray-100 mb-3">{task.name}</h1>
+      <h1 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">{formatTaskName(task)}</h1>
 
       <div className="flex items-center gap-2 mb-4">
         <PriorityBadge priority={task.priority} />
@@ -152,14 +153,14 @@ function TaskDetailPage() {
 
       {/* Prev / Next navigation */}
       {(siblings.prev || siblings.next) && (
-        <div className="mt-8 flex items-center justify-between border-t border-gray-800 pt-4">
+        <div className="mt-8 flex items-center justify-between border-t border-gray-200 dark:border-gray-800 pt-4">
           {siblings.prev ? (
             <Link
               to="/tasks/$taskId"
               params={{ taskId: siblings.prev.id }}
-              className="text-sm text-gray-400 hover:text-gray-200 transition-colors"
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
             >
-              ← {siblings.prev.name}
+              ← {formatTaskName(siblings.prev)}
             </Link>
           ) : (
             <span />
@@ -168,9 +169,9 @@ function TaskDetailPage() {
             <Link
               to="/tasks/$taskId"
               params={{ taskId: siblings.next.id }}
-              className="text-sm text-gray-400 hover:text-gray-200 transition-colors"
+              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 transition-colors"
             >
-              {siblings.next.name} →
+              {formatTaskName(siblings.next)} →
             </Link>
           ) : (
             <span />

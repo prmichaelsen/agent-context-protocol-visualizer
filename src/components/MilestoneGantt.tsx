@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { StatusBadge } from './StatusBadge'
+import { formatMilestoneName } from '../lib/display'
 import type { Milestone, Task } from '../lib/types'
 
 interface MilestoneGanttProps {
@@ -118,17 +119,17 @@ export function MilestoneGantt({ milestones, tasks }: MilestoneGanttProps) {
                 : 'bg-gray-500/30 border-gray-500/40'
 
           return (
-            <div key={milestone.id} className="flex items-center h-12 px-3 hover:bg-gray-800/20">
+            <div key={milestone.id} className="flex items-center h-12 px-3 hover:bg-gray-200/20 dark:hover:bg-gray-800/20">
               {/* Label */}
               <div className="w-48 shrink-0 flex items-center gap-2">
-                <span className="text-xs text-gray-300 truncate">{milestone.name}</span>
+                <span className="text-xs text-gray-700 dark:text-gray-300 truncate">{formatMilestoneName(milestone)}</span>
               </div>
               {/* Bar area */}
               <div className="flex-1 relative h-6">
                 <div
                   className={`absolute top-1 h-4 rounded-sm border ${barColor} transition-all`}
                   style={{ left: `${barStart}%`, width: `${barWidth}%` }}
-                  title={`${milestone.name}: ${start ? formatDate(start) : '?'} → ${end ? formatDate(end) : '?'} (${milestone.progress}%)`}
+                  title={`${formatMilestoneName(milestone)}: ${start ? formatDate(start) : '?'} → ${end ? formatDate(end) : '?'} (${milestone.progress}%)`}
                 >
                   {/* Progress fill within bar */}
                   <div

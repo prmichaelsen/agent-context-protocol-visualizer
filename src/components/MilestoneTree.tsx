@@ -7,6 +7,7 @@ import { ProgressBar } from './ProgressBar'
 import { PreviewButton } from './PreviewButton'
 import { TaskList } from './TaskList'
 import { useCollapse } from '../lib/useCollapse'
+import { formatMilestoneName } from '../lib/display'
 import type { Milestone, Task } from '../lib/types'
 
 interface MilestoneTreeProps {
@@ -45,7 +46,7 @@ function MilestoneTreeRow({
             className="text-sm font-medium text-gray-900 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
             onClick={(e) => e.stopPropagation()}
           >
-            {milestone.name}
+            {formatMilestoneName(milestone)}
           </Link>
           <PreviewButton type="milestone" id={milestone.id} />
         </div>

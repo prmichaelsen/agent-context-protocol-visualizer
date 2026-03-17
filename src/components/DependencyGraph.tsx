@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import dagre from 'dagre'
+import { formatTaskName, formatMilestoneName } from '../lib/display'
 import type { ProgressData, Task, Status } from '../lib/types'
 
 interface DependencyGraphProps {
@@ -43,7 +44,7 @@ function buildGraph(data: ProgressData): { nodes: GraphNode[]; edges: GraphEdge[
   for (const milestone of data.milestones) {
     const tasks = data.tasks[milestone.id] || []
     for (const task of tasks) {
-      allTasks.push({ ...task, milestoneName: milestone.name })
+      allTasks.push({ ...task, milestoneName: formatMilestoneName(milestone) })
     }
   }
 
@@ -80,7 +81,7 @@ function buildGraph(data: ProgressData): { nodes: GraphNode[]; edges: GraphEdge[
     const node = g.node(String(task.id))
     return {
       id: String(task.id),
-      label: task.name,
+      label: formatTaskName(task),
       status: task.status,
       milestone: task.milestoneName,
       x: node.x,

@@ -5,6 +5,7 @@ import { StatusBadge } from '../components/StatusBadge'
 import { StatusDot } from '../components/StatusDot'
 import { buildSearchIndex } from '../lib/search'
 import { useProgressData } from '../contexts/ProgressContext'
+import { formatTaskName, formatMilestoneName } from '../lib/display'
 
 export const Route = createFileRoute('/search')({
   component: SearchPage,
@@ -45,21 +46,21 @@ function SearchPage() {
           {results.map((result, i) => (
             <div
               key={i}
-              className="bg-gray-900/50 border border-gray-800 rounded-lg px-4 py-3"
+              className="bg-gray-100 dark:bg-gray-900/50 border border-gray-200 dark:border-gray-800 rounded-lg px-4 py-3"
             >
               <div className="flex items-center gap-3">
                 {result.item.type === 'task' && result.item.task ? (
                   <>
                     <StatusDot status={result.item.task.status} />
-                    <span className="text-sm">{result.item.task.name}</span>
-                    <span className="text-xs text-gray-600 ml-auto">
-                      {result.item.milestone.name}
+                    <span className="text-sm text-gray-900 dark:text-gray-200">{formatTaskName(result.item.task)}</span>
+                    <span className="text-xs text-gray-600 dark:text-gray-600 ml-auto">
+                      {formatMilestoneName(result.item.milestone)}
                     </span>
                   </>
                 ) : (
                   <>
-                    <span className="text-sm font-medium">
-                      {result.item.milestone.name}
+                    <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
+                      {formatMilestoneName(result.item.milestone)}
                     </span>
                     <StatusBadge status={result.item.milestone.status} />
                   </>

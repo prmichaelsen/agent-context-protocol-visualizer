@@ -6,6 +6,7 @@ import { DetailHeader } from './DetailHeader'
 import { PriorityBadge } from './PriorityBadge'
 import { MarkdownContent, buildLinkMap } from './MarkdownContent'
 import { getMarkdownContent, resolveTaskFile } from '../services/markdown.service'
+import { formatTaskName, formatMilestoneName } from '../lib/display'
 import type { MarkdownResult } from '../services/markdown.service'
 
 interface TaskPreviewProps {
@@ -100,7 +101,7 @@ export function TaskPreview({ taskId }: TaskPreviewProps) {
           params={{ milestoneId: milestone.id }}
           className="text-blue-500 dark:text-blue-400 hover:underline"
         >
-          {milestone.id.replace('milestone_', 'M')} — {milestone.name}
+          {formatMilestoneName(milestone)}
         </Link>
       ),
     },
@@ -109,7 +110,7 @@ export function TaskPreview({ taskId }: TaskPreviewProps) {
   return (
     <div>
       <div className="flex items-start justify-between mb-4">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{task.name}</h1>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{formatTaskName(task)}</h1>
         <Link
           to="/tasks/$taskId"
           params={{ taskId }}

@@ -4,6 +4,7 @@ import { PriorityBadge } from './PriorityBadge'
 import { ProgressBar } from './ProgressBar'
 import { PreviewButton } from './PreviewButton'
 import { TaskList } from './TaskList'
+import { formatMilestoneName } from '../lib/display'
 import type { Milestone, Task, Status } from '../lib/types'
 import { useState } from 'react'
 import { ChevronDown, ChevronRight } from 'lucide-react'
@@ -38,7 +39,7 @@ function KanbanCard({
             params={{ milestoneId: milestone.id }}
             className="text-sm font-medium leading-tight text-gray-900 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
           >
-            {milestone.name}
+            {formatMilestoneName(milestone)}
           </Link>
           <PreviewButton type="milestone" id={milestone.id} />
         </div>

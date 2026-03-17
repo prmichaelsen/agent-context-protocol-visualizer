@@ -14,6 +14,7 @@ import { PriorityBadge } from './PriorityBadge'
 import { ProgressBar } from './ProgressBar'
 import { PreviewButton } from './PreviewButton'
 import { TaskList } from './TaskList'
+import { formatMilestoneName } from '../lib/display'
 import type { Milestone, Task } from '../lib/types'
 
 const columnHelper = createColumnHelper<Milestone>()
@@ -62,7 +63,7 @@ export function MilestoneTable({ milestones, tasks }: MilestoneTableProps) {
             className="text-sm font-medium text-gray-900 dark:text-gray-200 hover:text-blue-500 dark:hover:text-blue-400 transition-colors"
             onClick={(e) => e.stopPropagation()}
           >
-            {info.getValue()}
+            {formatMilestoneName(info.row.original)}
           </Link>
           <PreviewButton type="milestone" id={info.row.original.id} />
         </div>

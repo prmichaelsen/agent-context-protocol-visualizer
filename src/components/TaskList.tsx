@@ -3,6 +3,7 @@ import { StatusDot } from './StatusDot'
 import { PriorityBadge } from './PriorityBadge'
 import { PreviewButton } from './PreviewButton'
 import { ExtraFieldsBadge } from './ExtraFieldsBadge'
+import { formatTaskName } from '../lib/display'
 import type { Task } from '../lib/types'
 
 export function TaskList({ tasks }: { tasks: Task[] }) {
@@ -26,7 +27,7 @@ export function TaskList({ tasks }: { tasks: Task[] }) {
               task.status === 'completed' ? 'text-gray-500 dark:text-gray-500' : 'text-gray-900 dark:text-gray-200'
             }`}
           >
-            {task.name}
+            {formatTaskName(task)}
           </Link>
           <PreviewButton type="task" id={task.id} />
           <PriorityBadge priority={task.priority} />

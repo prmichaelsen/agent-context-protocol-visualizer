@@ -8,6 +8,7 @@ import { StatusDot } from './StatusDot'
 import { PriorityBadge } from './PriorityBadge'
 import { MarkdownContent, buildLinkMap } from './MarkdownContent'
 import { getMarkdownContent, resolveMilestoneFile } from '../services/markdown.service'
+import { formatMilestoneName } from '../lib/display'
 import type { MarkdownResult, ResolveFileResult } from '../services/markdown.service'
 
 interface MilestonePreviewProps {
@@ -89,7 +90,7 @@ export function MilestonePreview({ milestoneId }: MilestonePreviewProps) {
   return (
     <div>
       <div className="flex items-start justify-between mb-4">
-        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{milestone.name}</h1>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{formatMilestoneName(milestone)}</h1>
         <Link
           to="/milestones/$milestoneId"
           params={{ milestoneId }}
