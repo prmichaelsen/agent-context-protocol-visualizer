@@ -159,13 +159,13 @@ function RootLayout() {
     <>
       <AutoRefresh />
       <div className="flex h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Bottom Right (Thumb Zone) */}
         <button
           onClick={() => setMobileMenuOpen(true)}
-          className="lg:hidden fixed top-4 left-4 z-50 p-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
+          className="lg:hidden fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
           aria-label="Open menu"
         >
-          <Menu className="w-5 h-5 text-gray-900 dark:text-gray-100" />
+          <Menu className="w-6 h-6 text-gray-900 dark:text-gray-100" />
         </button>
 
         {/* Mobile Backdrop */}

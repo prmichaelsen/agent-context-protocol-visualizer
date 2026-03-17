@@ -14,7 +14,7 @@ export function Header({ data }: HeaderProps) {
   if (!data) return null
 
   return (
-    <header className="h-14 border-b border-gray-200 dark:border-gray-800 flex items-center pl-16 lg:pl-6 pr-4 lg:pr-6 gap-2 lg:gap-4 shrink-0 bg-white dark:bg-gray-950">
+    <header className="h-14 border-b border-gray-200 dark:border-gray-800 flex items-center px-4 lg:px-6 gap-2 lg:gap-4 shrink-0 bg-white dark:bg-gray-950">
       <h1 className="text-sm font-medium text-gray-900 dark:text-gray-200 truncate">{data.project.name}</h1>
       <span className="hidden sm:inline text-xs text-gray-500 dark:text-gray-500 font-mono">v{data.project.version}</span>
       <div className="hidden sm:block">
