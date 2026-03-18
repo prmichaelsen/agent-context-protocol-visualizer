@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.10.2] - 2026-03-18
+
+### Added
+- Mobile scroll hint for Gantt chart timeline
+- Mobile warning banner for Dependency Graph with usage guidance
+
+### Changed
+- Gantt chart now horizontally scrollable on mobile with minimum 800px width
+- Gantt month labels increased from 10px to 12px on mobile for better readability
+- Gantt milestone label width reduced on mobile (w-32) to save space
+- Dependency Graph wrapped in scrollable container for mobile overflow
+
 ## [0.10.1] - 2026-03-18
 
 ### Changed

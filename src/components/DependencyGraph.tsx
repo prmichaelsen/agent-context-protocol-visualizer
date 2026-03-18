@@ -127,8 +127,17 @@ export function DependencyGraph({ data }: DependencyGraphProps) {
   }
 
   return (
-    <div className="border border-gray-800 rounded-lg overflow-auto bg-gray-950/50">
-      <svg width={width} height={height} className="min-w-full">
+    <div className="border border-gray-800 rounded-lg bg-gray-950/50">
+      {/* Mobile hint */}
+      <div className="lg:hidden bg-blue-900/20 border-b border-blue-800/30 px-4 py-3 text-sm text-blue-300">
+        <p className="font-medium mb-1">Complex visualization</p>
+        <p className="text-xs text-blue-400/80">
+          This dependency graph is optimized for desktop. Scroll to explore or switch to Table/Tree view for better mobile experience.
+        </p>
+      </div>
+
+      <div className="overflow-auto">
+        <svg width={width} height={height} className="min-w-full">
         <defs>
           <marker
             id="arrowhead"
@@ -192,6 +201,7 @@ export function DependencyGraph({ data }: DependencyGraphProps) {
           )
         })}
       </svg>
+      </div>
     </div>
   )
 }

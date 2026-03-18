@@ -91,21 +91,29 @@ export function MilestoneGantt({ milestones, tasks }: MilestoneGanttProps) {
 
   return (
     <div className="border border-gray-800 rounded-lg overflow-hidden">
-      {/* Timeline header */}
-      <div className="relative h-8 bg-gray-900/50 border-b border-gray-800">
-        {monthLabels.map((m, i) => (
-          <div
-            key={i}
-            className="absolute top-0 h-full border-l border-gray-800 flex items-center"
-            style={{ left: `${Math.max(0, m.left)}%` }}
-          >
-            <span className="text-[10px] text-gray-500 pl-1.5">{m.label}</span>
-          </div>
-        ))}
+      {/* Mobile hint */}
+      <div className="lg:hidden bg-gray-900/30 border-b border-gray-800 px-3 py-2 text-xs text-gray-500">
+        ← Scroll horizontally to view timeline →
       </div>
 
-      {/* Bars */}
-      <div className="divide-y divide-gray-800/50">
+      {/* Scrollable container */}
+      <div className="overflow-x-auto">
+        <div className="min-w-[800px]">
+          {/* Timeline header */}
+          <div className="relative h-8 bg-gray-900/50 border-b border-gray-800">
+            {monthLabels.map((m, i) => (
+              <div
+                key={i}
+                className="absolute top-0 h-full border-l border-gray-800 flex items-center"
+                style={{ left: `${Math.max(0, m.left)}%` }}
+              >
+                <span className="text-xs lg:text-[10px] text-gray-500 pl-1.5">{m.label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Bars */}
+          <div className="divide-y divide-gray-800/50">
         {bars.map(({ milestone, start, end }) => {
           const barStart = start ? (daysBetween(minDate, start) / totalDays) * 100 : 0
           const barEnd = end ? (daysBetween(minDate, end) / totalDays) * 100 : barStart + 5
@@ -121,7 +129,7 @@ export function MilestoneGantt({ milestones, tasks }: MilestoneGanttProps) {
           return (
             <div key={milestone.id} className="flex items-center h-12 px-3 hover:bg-gray-200/20 dark:hover:bg-gray-800/20">
               {/* Label */}
-              <div className="w-48 shrink-0 flex items-center gap-2">
+              <div className="w-32 lg:w-48 shrink-0 flex items-center gap-2">
                 <span className="text-xs text-gray-700 dark:text-gray-300 truncate">{formatMilestoneName(milestone)}</span>
               </div>
               {/* Bar area */}
@@ -145,6 +153,8 @@ export function MilestoneGantt({ milestones, tasks }: MilestoneGanttProps) {
             </div>
           )
         })}
+        </div>
+      </div>
       </div>
     </div>
   )
