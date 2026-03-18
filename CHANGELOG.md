@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.11.0] - 2026-03-18
+
+### Added
+- GitHub OAuth authentication for private repository access
+- Repository search typeahead for authenticated users
+- OAuth callback route at `/auth/github/callback`
+- GitHub sign-in/sign-out UI in sidebar
+- Token storage in localStorage with CSRF state protection
+- Authenticated API requests for private repos and higher rate limits
+
+### Changed
+- GitHub input placeholder changes based on auth state ("Search your repos..." vs "owner/repo")
+- GitHub API calls now include Authorization header when token is available
+- Repository suggestions dropdown shows when typing (authenticated users only)
+
 ## [0.10.3] - 2026-03-18
 
 ### Fixed

@@ -1,13 +1,14 @@
-import { HeadContent, Scripts, createRootRoute, Outlet, useRouter, useRouterState } from '@tanstack/react-router'
+import { HeadContent, Scripts, createRootRoute, Outlet } from '@tanstack/react-router'
 import { useState, useCallback, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
 import { useAutoRefresh } from '../lib/useAutoRefresh'
 import { Sidebar } from '../components/Sidebar'
 import { Header } from '../components/Header'
 import { SidePanel } from '../components/SidePanel'
-import { getProgressData } from '../services/progress-database.service'
+import { getProgressData, type ProgressResult } from '../services/progress-database.service'
 import { listProjects, getProjectProgressPath } from '../services/projects.service'
-import { fetchGitHubProgress } from '../services/github.service'
+import { fetchGitHubProgress, type GitHubResult } from '../services/github.service'
+import { getStoredToken } from '../lib/github-auth'
 import type { ProgressData } from '../lib/types'
 import type { AcpProject } from '../services/projects.service'
 import { ProgressProvider } from '../contexts/ProgressContext'
@@ -28,7 +29,7 @@ export const Route = createRootRoute({
     if (!import.meta.env.VITE_HOSTED) {
       try {
         const [result, projectList] = await Promise.all([
-          getProgressData({ data: {} }),
+          getProgressData({ data: {} }) as Promise<ProgressResult>,
           listProjects(),
         ])
         if (result.ok) {
@@ -120,7 +121,8 @@ function RootLayout() {
     const repoParam = getRepoFromUrl()
     // Repo param takes precedence over default local data
     if (repoParam) {
-      fetchGitHubProgress({ data: repoParam }).then((result) => {
+      const token = getStoredToken()
+      void (fetchGitHubProgress({ data: { ...repoParam, token: token || undefined } }) as Promise<GitHubResult>).then((result) => {
         if (result.ok) {
           setProgressData(result.data)
           setCurrentProject(`${repoParam.owner}/${repoParam.repo}`)
@@ -130,7 +132,8 @@ function RootLayout() {
   }, [initialLoadDone])
 
   const handleGitHubLoad = useCallback(async (owner: string, repo: string) => {
-    const result = await fetchGitHubProgress({ data: { owner, repo } })
+    const token = getStoredToken()
+    const result = await (fetchGitHubProgress({ data: { owner, repo, token: token || undefined } }) as Promise<GitHubResult>)
     if (result.ok) {
       setProgressData(result.data)
       setCurrentProject(`${owner}/${repo}`)
@@ -144,7 +147,7 @@ function RootLayout() {
     try {
       const path = await getProjectProgressPath({ data: { projectId } })
       if (path) {
-        const result = await getProgressData({ data: { path } })
+        const result = await (getProgressData({ data: { path } }) as Promise<ProgressResult>)
         if (result.ok) {
           setProgressData(result.data)
           setCurrentProject(projectId)

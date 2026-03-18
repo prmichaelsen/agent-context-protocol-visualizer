@@ -28,6 +28,7 @@ import { Route as PatternsSlugRouteImport } from './routes/patterns.$slug'
 import { Route as MilestonesMilestoneIdRouteImport } from './routes/milestones.$milestoneId'
 import { Route as DesignsSlugRouteImport } from './routes/designs.$slug'
 import { Route as ApiWatchRouteImport } from './routes/api/watch'
+import { Route as AuthGithubCallbackRouteImport } from './routes/auth/github/callback'
 
 const TasksRoute = TasksRouteImport.update({
   id: '/tasks',
@@ -124,6 +125,11 @@ const ApiWatchRoute = ApiWatchRouteImport.update({
   path: '/api/watch',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
+  id: '/auth/github/callback',
+  path: '/auth/github/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -145,6 +151,7 @@ export interface FileRoutesByFullPath {
   '/patterns/': typeof PatternsIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/tasks/': typeof TasksIndexRoute
+  '/auth/github/callback': typeof AuthGithubCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -161,6 +168,7 @@ export interface FileRoutesByTo {
   '/patterns': typeof PatternsIndexRoute
   '/reports': typeof ReportsIndexRoute
   '/tasks': typeof TasksIndexRoute
+  '/auth/github/callback': typeof AuthGithubCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -183,6 +191,7 @@ export interface FileRoutesById {
   '/patterns/': typeof PatternsIndexRoute
   '/reports/': typeof ReportsIndexRoute
   '/tasks/': typeof TasksIndexRoute
+  '/auth/github/callback': typeof AuthGithubCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -206,6 +215,7 @@ export interface FileRouteTypes {
     | '/patterns/'
     | '/reports/'
     | '/tasks/'
+    | '/auth/github/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/patterns'
     | '/reports'
     | '/tasks'
+    | '/auth/github/callback'
   id:
     | '__root__'
     | '/'
@@ -243,6 +254,7 @@ export interface FileRouteTypes {
     | '/patterns/'
     | '/reports/'
     | '/tasks/'
+    | '/auth/github/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -255,6 +267,7 @@ export interface RootRouteChildren {
   SearchRoute: typeof SearchRoute
   TasksRoute: typeof TasksRouteWithChildren
   ApiWatchRoute: typeof ApiWatchRoute
+  AuthGithubCallbackRoute: typeof AuthGithubCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -392,6 +405,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWatchRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/github/callback': {
+      id: '/auth/github/callback'
+      path: '/auth/github/callback'
+      fullPath: '/auth/github/callback'
+      preLoaderRoute: typeof AuthGithubCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -471,6 +491,7 @@ const rootRouteChildren: RootRouteChildren = {
   SearchRoute: SearchRoute,
   TasksRoute: TasksRouteWithChildren,
   ApiWatchRoute: ApiWatchRoute,
+  AuthGithubCallbackRoute: AuthGithubCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

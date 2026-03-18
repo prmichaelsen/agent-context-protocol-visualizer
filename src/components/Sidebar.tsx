@@ -2,6 +2,7 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import { LayoutDashboard, Flag, CheckSquare, Clock, Search, PenTool, Puzzle, FileBarChart, X } from 'lucide-react'
 import { ProjectSelector } from './ProjectSelector'
 import { GitHubInput } from './GitHubInput'
+import { GitHubAuth } from './GitHubAuth'
 import type { AcpProject } from '../services/projects.service'
 
 const navItems = [
@@ -83,6 +84,7 @@ export function Sidebar({ projects = [], currentProject = null, onProjectSelect,
           <Search className="w-4 h-4" />
           Search...
         </Link>
+        <GitHubAuth />
         {onGitHubLoad && (
           <GitHubInput onLoad={onGitHubLoad} />
         )}
