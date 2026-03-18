@@ -161,11 +161,15 @@ function RootLayout() {
       <div className="flex h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
         {/* Mobile Menu Button - Bottom Right (Thumb Zone) */}
         <button
-          onClick={() => setMobileMenuOpen(true)}
-          className="lg:hidden fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg"
-          aria-label="Open menu"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="lg:hidden fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg transition-transform duration-200"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
-          <Menu className="w-6 h-6 text-gray-900 dark:text-gray-100" />
+          {mobileMenuOpen ? (
+            <X className="w-6 h-6 text-gray-900 dark:text-gray-100" />
+          ) : (
+            <Menu className="w-6 h-6 text-gray-900 dark:text-gray-100" />
+          )}
         </button>
 
         {/* Mobile Backdrop */}
@@ -176,10 +180,10 @@ function RootLayout() {
           />
         )}
 
-        {/* Sidebar - Desktop: Always visible | Mobile: Drawer */}
+        {/* Sidebar - Desktop: Always visible | Mobile: Bottom Drawer */}
         <div
-          className={`fixed lg:relative inset-y-0 left-0 z-50 transition-transform duration-300 lg:translate-x-0 ${
-            mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+          className={`fixed lg:relative bottom-0 left-0 right-0 lg:inset-y-0 lg:right-auto z-50 transition-transform duration-300 lg:translate-y-0 ${
+            mobileMenuOpen ? 'translate-y-0' : 'translate-y-full'
           }`}
         >
           <Sidebar

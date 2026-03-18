@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.9.5] - 2026-03-18
+
+### Changed
+- Mobile drawer now slides up from bottom instead of left (better mobile UX pattern)
+- Hamburger menu button transforms to X when drawer is open
+- Clicking X button closes the drawer
+- Drawer has rounded top corners on mobile (rounded-t-2xl)
+- Drawer limited to 80vh max height on mobile with scrollable content
+- Navigation links now auto-close drawer when clicked on mobile
+
 ## [0.9.4] - 2026-03-17
 
 ### Changed

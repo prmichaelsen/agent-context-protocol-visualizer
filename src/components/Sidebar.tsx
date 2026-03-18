@@ -26,7 +26,7 @@ export function Sidebar({ projects = [], currentProject = null, onProjectSelect,
   const location = useRouterState({ select: (s) => s.location })
 
   return (
-    <nav className="w-56 h-full border-r border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-950 flex flex-col shrink-0">
+    <nav className="w-full lg:w-56 h-auto max-h-[80vh] lg:h-full border-t lg:border-t-0 lg:border-r border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-gray-950 flex flex-col shrink-0 rounded-t-2xl lg:rounded-none overflow-hidden">
       <div className="p-4 border-b border-gray-200 dark:border-gray-800 flex items-center justify-between">
         <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">
           ACP Visualizer
@@ -50,7 +50,7 @@ export function Sidebar({ projects = [], currentProject = null, onProjectSelect,
           />
         </div>
       )}
-      <div className="flex-1 py-2">
+      <div className="flex-1 py-2 overflow-y-auto">
         {navItems.map((item) => {
           const isActive =
             item.to === '/'
@@ -66,6 +66,7 @@ export function Sidebar({ projects = [], currentProject = null, onProjectSelect,
                   ? 'text-gray-900 dark:text-gray-100 bg-gray-200 dark:bg-gray-800/50'
                   : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-800/30'
               }`}
+              onClick={onClose}
             >
               <item.icon className="w-4 h-4" />
               {item.label}
@@ -77,6 +78,7 @@ export function Sidebar({ projects = [], currentProject = null, onProjectSelect,
         <Link
           to="/search"
           className="flex items-center gap-2 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-500 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-800 rounded-md hover:text-gray-900 dark:hover:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600 transition-colors"
+          onClick={onClose}
         >
           <Search className="w-4 h-4" />
           Search...
