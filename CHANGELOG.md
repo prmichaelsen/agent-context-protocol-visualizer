@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.11.1] - 2026-03-18
+
+### Added
+- GitHub tab with full-page repository list experience
+- Repository metadata display (stars, forks, language, private badge)
+- Search/filter functionality for GitHub repos
+- Click-to-load any repository directly from the list
+
 ## [0.11.0] - 2026-03-18
 
 ### Added

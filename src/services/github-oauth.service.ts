@@ -10,7 +10,7 @@ export type GitHubUserResult =
   | { ok: false; error: string }
 
 export type GitHubRepoSearchResult =
-  | { ok: true; repos: Array<{ full_name: string; description: string | null; private: boolean }> }
+  | { ok: true; repos: Array<{ full_name: string; description: string | null; private: boolean; stargazers_count?: number; forks_count?: number; language?: string | null; updated_at?: string }> }
   | { ok: false; error: string }
 
 export const exchangeOAuthCode = createServerFn({ method: 'POST' })
@@ -105,6 +105,10 @@ export const searchGitHubRepos = createServerFn({ method: 'GET' })
         full_name: string
         description: string | null
         private: boolean
+        stargazers_count?: number
+        forks_count?: number
+        language?: string | null
+        updated_at?: string
       }>
 
       // Filter by query

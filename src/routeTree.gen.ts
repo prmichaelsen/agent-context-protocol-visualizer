@@ -14,6 +14,7 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ReportsRouteImport } from './routes/reports'
 import { Route as PatternsRouteImport } from './routes/patterns'
 import { Route as MilestonesRouteImport } from './routes/milestones'
+import { Route as GithubRouteImport } from './routes/github'
 import { Route as DesignsRouteImport } from './routes/designs'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
@@ -53,6 +54,11 @@ const PatternsRoute = PatternsRouteImport.update({
 const MilestonesRoute = MilestonesRouteImport.update({
   id: '/milestones',
   path: '/milestones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GithubRoute = GithubRouteImport.update({
+  id: '/github',
+  path: '/github',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsRoute = DesignsRouteImport.update({
@@ -135,6 +141,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
   '/designs': typeof DesignsRouteWithChildren
+  '/github': typeof GithubRoute
   '/milestones': typeof MilestonesRouteWithChildren
   '/patterns': typeof PatternsRouteWithChildren
   '/reports': typeof ReportsRouteWithChildren
@@ -156,6 +163,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
+  '/github': typeof GithubRoute
   '/search': typeof SearchRoute
   '/api/watch': typeof ApiWatchRoute
   '/designs/$slug': typeof DesignsSlugRoute
@@ -175,6 +183,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
   '/designs': typeof DesignsRouteWithChildren
+  '/github': typeof GithubRoute
   '/milestones': typeof MilestonesRouteWithChildren
   '/patterns': typeof PatternsRouteWithChildren
   '/reports': typeof ReportsRouteWithChildren
@@ -199,6 +208,7 @@ export interface FileRouteTypes {
     | '/'
     | '/activity'
     | '/designs'
+    | '/github'
     | '/milestones'
     | '/patterns'
     | '/reports'
@@ -220,6 +230,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/activity'
+    | '/github'
     | '/search'
     | '/api/watch'
     | '/designs/$slug'
@@ -238,6 +249,7 @@ export interface FileRouteTypes {
     | '/'
     | '/activity'
     | '/designs'
+    | '/github'
     | '/milestones'
     | '/patterns'
     | '/reports'
@@ -261,6 +273,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ActivityRoute: typeof ActivityRoute
   DesignsRoute: typeof DesignsRouteWithChildren
+  GithubRoute: typeof GithubRoute
   MilestonesRoute: typeof MilestonesRouteWithChildren
   PatternsRoute: typeof PatternsRouteWithChildren
   ReportsRoute: typeof ReportsRouteWithChildren
@@ -305,6 +318,13 @@ declare module '@tanstack/react-router' {
       path: '/milestones'
       fullPath: '/milestones'
       preLoaderRoute: typeof MilestonesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/github': {
+      id: '/github'
+      path: '/github'
+      fullPath: '/github'
+      preLoaderRoute: typeof GithubRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/designs': {
@@ -485,6 +505,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ActivityRoute: ActivityRoute,
   DesignsRoute: DesignsRouteWithChildren,
+  GithubRoute: GithubRoute,
   MilestonesRoute: MilestonesRouteWithChildren,
   PatternsRoute: PatternsRouteWithChildren,
   ReportsRoute: ReportsRouteWithChildren,

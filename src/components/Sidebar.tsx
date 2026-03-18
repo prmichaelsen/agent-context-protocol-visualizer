@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { LayoutDashboard, Flag, CheckSquare, Clock, Search, PenTool, Puzzle, FileBarChart, X } from 'lucide-react'
+import { LayoutDashboard, Flag, CheckSquare, Clock, Search, PenTool, Puzzle, FileBarChart, Github, X } from 'lucide-react'
 import { ProjectSelector } from './ProjectSelector'
 import { GitHubInput } from './GitHubInput'
 import { GitHubAuth } from './GitHubAuth'
@@ -13,6 +13,7 @@ const navItems = [
   { to: '/designs' as const, icon: PenTool, label: 'Designs' },
   { to: '/patterns' as const, icon: Puzzle, label: 'Patterns' },
   { to: '/reports' as const, icon: FileBarChart, label: 'Reports' },
+  { to: '/github' as const, icon: Github, label: 'GitHub' },
 ]
 
 interface SidebarProps {
