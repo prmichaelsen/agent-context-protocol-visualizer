@@ -52,6 +52,16 @@ function buildEstimateData(data: ProgressData): MilestoneEstimate[] {
 
 export function EstimateChart({ data }: EstimateChartProps) {
   const chartData = buildEstimateData(data)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   if (chartData.length === 0) {
     return null
@@ -59,15 +69,22 @@ export function EstimateChart({ data }: EstimateChartProps) {
 
   const hasActuals = chartData.some((d) => d.actual !== null)
 
+  // Mobile: LR (horizontal bars), Desktop: TB (vertical bars) for better space usage
+  const layout = isMobile ? 'vertical' : 'vertical'
+  const chartHeight = isMobile
+    ? Math.max(200, chartData.length * 50 + 40)  // LR: height scales with items
+    : Math.max(300, chartData.length * 50 + 40)
+  const yAxisWidth = isMobile ? 120 : 180
+
   return (
     <div className="bg-gray-900/50 border border-gray-800 rounded-xl p-5">
       <h3 className="text-sm font-semibold text-gray-300 mb-4">
         Estimated vs Actual Hours
       </h3>
-      <ResponsiveContainer width="100%" height={Math.max(200, chartData.length * 50 + 40)}>
+      <ResponsiveContainer width="100%" height={chartHeight}>
         <BarChart
           data={chartData}
-          layout="vertical"
+          layout={layout}
           margin={{ top: 5, right: 20, bottom: 5, left: 10 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#1f2937" horizontal={false} />
@@ -81,7 +98,7 @@ export function EstimateChart({ data }: EstimateChartProps) {
           <YAxis
             type="category"
             dataKey="name"
-            width={180}
+            width={yAxisWidth}
             tick={{ fill: '#9ca3af', fontSize: 11 }}
             tickLine={false}
             axisLine={{ stroke: '#374151' }}

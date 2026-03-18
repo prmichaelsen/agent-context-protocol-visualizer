@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.1] - 2026-03-18
+
+### Changed
+- EstimateChart now uses responsive Y-axis width (120px on mobile, 180px on desktop)
+- Chart height adjusts based on screen size for better mobile display
+
 ## [0.10.0] - 2026-03-18
 
 ### Added
