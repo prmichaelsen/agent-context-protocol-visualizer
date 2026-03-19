@@ -18,13 +18,23 @@ interface SidePanelContextValue {
 const SidePanelContext = createContext<SidePanelContextValue | undefined>(undefined)
 
 const MIN_WIDTH = 300
-const MAX_WIDTH = 800
 const DEFAULT_WIDTH = 500
+const STORAGE_KEY = 'acp-visualizer.side-panel-size'
+
+function loadWidth(): number {
+  if (typeof window === 'undefined') return DEFAULT_WIDTH
+  const stored = localStorage.getItem(STORAGE_KEY)
+  if (stored) {
+    const parsed = Number(stored)
+    if (!isNaN(parsed) && parsed >= MIN_WIDTH) return parsed
+  }
+  return DEFAULT_WIDTH
+}
 
 export function SidePanelProvider({ children }: { children: ReactNode }) {
   const [content, setContent] = useState<PanelContent>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [width, setWidthState] = useState(DEFAULT_WIDTH)
+  const [width, setWidthState] = useState(loadWidth)
 
   const openMilestone = (id: string) => {
     setContent({ type: 'milestone', id })
@@ -42,8 +52,9 @@ export function SidePanelProvider({ children }: { children: ReactNode }) {
   }
 
   const setWidth = (newWidth: number) => {
-    const clampedWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, newWidth))
-    setWidthState(clampedWidth)
+    const clamped = Math.max(MIN_WIDTH, newWidth)
+    setWidthState(clamped)
+    localStorage.setItem(STORAGE_KEY, String(clamped))
   }
 
   return (

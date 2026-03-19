@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.13.1] - 2026-03-19
+
+### Changed
+- Remove max-width cap on sidepanel (was 800px, now unbounded)
+- Persist sidepanel width to localStorage under `acp-visualizer.side-panel-size` key
+- Width preference is restored across sessions and instances
+
 ## [0.13.0] - 2026-03-18
 
 ### Added
