@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.13.4] - 2026-03-20
+
+### Changed
+- Remove left/right padding on mobile milestones page to maximize content real estate
+- FilterBar uses horizontal overflow-x pill bar instead of wrapping (matches agentbase.me pattern)
+- Search input breaks to new line on mobile, full-width below sm breakpoint
+- Wrap milestone views in overflow-x-auto container for horizontal scroll on small screens
+- SidePanel renders as bottom sheet on mobile with backdrop, drag indicator, and body scroll lock; desktop behavior unchanged
+
 ## [0.13.3] - 2026-03-20
 
 ### Changed

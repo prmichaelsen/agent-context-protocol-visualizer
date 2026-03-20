@@ -49,39 +49,41 @@ function MilestonesPage() {
 
   if (!filtered) {
     return (
-      <div className="p-6">
+      <div className="py-4 px-4 lg:p-6">
         <p className="text-gray-600 text-sm">No data loaded</p>
       </div>
     )
   }
 
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div className="py-4 lg:p-6">
+      <div className="flex items-center justify-between mb-4 px-4 lg:px-0">
         <h2 className="text-lg font-semibold">Milestones</h2>
         <ViewToggle value={view} onChange={setView} />
       </div>
       {view !== 'kanban' && (
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-4 px-4 lg:px-0">
           <FilterBar status={status} onStatusChange={setStatus} />
-          <div className="w-64">
+          <div className="w-full sm:w-64">
             <SearchInput value={search} onChange={setSearch} placeholder="Filter milestones..." />
           </div>
         </div>
       )}
-      {view === 'table' ? (
-        <MilestoneTable milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : view === 'tree' ? (
-        <MilestoneTree milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : view === 'kanban' ? (
-        <MilestoneKanban milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : view === 'gantt' ? (
-        <MilestoneGantt milestones={filtered.milestones} tasks={filtered.tasks} />
-      ) : (
-        <Suspense fallback={<p className="text-gray-500 text-sm">Loading graph...</p>}>
-          <DependencyGraph data={filtered} />
-        </Suspense>
-      )}
+      <div className="overflow-x-auto">
+        {view === 'table' ? (
+          <MilestoneTable milestones={filtered.milestones} tasks={filtered.tasks} />
+        ) : view === 'tree' ? (
+          <MilestoneTree milestones={filtered.milestones} tasks={filtered.tasks} />
+        ) : view === 'kanban' ? (
+          <MilestoneKanban milestones={filtered.milestones} tasks={filtered.tasks} />
+        ) : view === 'gantt' ? (
+          <MilestoneGantt milestones={filtered.milestones} tasks={filtered.tasks} />
+        ) : (
+          <Suspense fallback={<p className="text-gray-500 text-sm">Loading graph...</p>}>
+            <DependencyGraph data={filtered} />
+          </Suspense>
+        )}
+      </div>
     </div>
   )
 }
