@@ -3,6 +3,7 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 type PanelContent =
   | { type: 'milestone'; id: string }
   | { type: 'task'; id: string }
+  | { type: 'document'; dirPath: string; slug: string }
   | null
 
 interface SidePanelContextValue {
@@ -11,6 +12,7 @@ interface SidePanelContextValue {
   width: number
   openMilestone: (id: string) => void
   openTask: (id: string) => void
+  openDocument: (dirPath: string, slug: string) => void
   close: () => void
   setWidth: (width: number) => void
 }
@@ -46,6 +48,11 @@ export function SidePanelProvider({ children }: { children: ReactNode }) {
     setIsOpen(true)
   }
 
+  const openDocument = (dirPath: string, slug: string) => {
+    setContent({ type: 'document', dirPath, slug })
+    setIsOpen(true)
+  }
+
   const close = () => {
     setIsOpen(false)
     setTimeout(() => setContent(null), 300) // Wait for animation
@@ -58,7 +65,7 @@ export function SidePanelProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <SidePanelContext.Provider value={{ content, isOpen, width, openMilestone, openTask, close, setWidth }}>
+    <SidePanelContext.Provider value={{ content, isOpen, width, openMilestone, openTask, openDocument, close, setWidth }}>
       {children}
     </SidePanelContext.Provider>
   )

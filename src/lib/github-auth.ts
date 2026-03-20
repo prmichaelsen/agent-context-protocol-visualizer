@@ -39,6 +39,17 @@ export function setStoredUser(user: GitHubUser) {
   localStorage.setItem(USER_KEY, JSON.stringify(user))
 }
 
+/** Read ?repo=owner/repo from URL search params */
+export function getGitHubParams(): { owner: string; repo: string } | undefined {
+  if (typeof window === 'undefined') return undefined
+  const params = new URLSearchParams(window.location.search)
+  const repo = params.get('repo')
+  if (!repo) return undefined
+  const parts = repo.split('/')
+  if (parts.length < 2) return undefined
+  return { owner: parts[0], repo: parts[1] }
+}
+
 export function getGitHubAuthUrl(clientId: string, redirectUri: string): string {
   const state = crypto.randomUUID()
   sessionStorage.setItem('github_oauth_state', state)

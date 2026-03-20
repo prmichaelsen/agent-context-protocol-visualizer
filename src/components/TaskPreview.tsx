@@ -7,21 +7,12 @@ import { DetailHeader } from './DetailHeader'
 import { PriorityBadge } from './PriorityBadge'
 import { MarkdownContent, buildLinkMap } from './MarkdownContent'
 import { getMarkdownContent, resolveTaskFile } from '../services/markdown.service'
+import { getGitHubParams } from '../lib/github-auth'
 import { formatTaskName, formatMilestoneName } from '../lib/display'
 import type { MarkdownResult } from '../services/markdown.service'
 
 interface TaskPreviewProps {
   taskId: string
-}
-
-function getGitHubParams(): { owner: string; repo: string } | undefined {
-  if (typeof window === 'undefined') return undefined
-  const params = new URLSearchParams(window.location.search)
-  const repo = params.get('repo')
-  if (!repo) return undefined
-  const parts = repo.split('/')
-  if (parts.length < 2) return undefined
-  return { owner: parts[0], repo: parts[1] }
 }
 
 export function TaskPreview({ taskId }: TaskPreviewProps) {

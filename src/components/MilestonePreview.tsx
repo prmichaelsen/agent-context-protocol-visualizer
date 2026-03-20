@@ -9,21 +9,12 @@ import { StatusDot } from './StatusDot'
 import { PriorityBadge } from './PriorityBadge'
 import { MarkdownContent, buildLinkMap } from './MarkdownContent'
 import { getMarkdownContent, resolveMilestoneFile } from '../services/markdown.service'
+import { getGitHubParams } from '../lib/github-auth'
 import { formatMilestoneName } from '../lib/display'
 import type { MarkdownResult, ResolveFileResult } from '../services/markdown.service'
 
 interface MilestonePreviewProps {
   milestoneId: string
-}
-
-function getGitHubParams(): { owner: string; repo: string } | undefined {
-  if (typeof window === 'undefined') return undefined
-  const params = new URLSearchParams(window.location.search)
-  const repo = params.get('repo')
-  if (!repo) return undefined
-  const parts = repo.split('/')
-  if (parts.length < 2) return undefined
-  return { owner: parts[0], repo: parts[1] }
 }
 
 export function MilestonePreview({ milestoneId }: MilestonePreviewProps) {

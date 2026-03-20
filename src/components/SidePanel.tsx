@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useCallback } from 'react'
 import { useSidePanel } from '../contexts/SidePanelContext'
 import { MilestonePreview } from './MilestonePreview'
 import { TaskPreview } from './TaskPreview'
+import { DocumentPreview } from './DocumentPreview'
 
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState(() =>
@@ -135,6 +136,7 @@ export function SidePanel() {
         <div className="p-6 overflow-auto h-[60vh] lg:h-[calc(100%-57px)]">
           {content?.type === 'milestone' && <MilestonePreview milestoneId={content.id} />}
           {content?.type === 'task' && <TaskPreview taskId={content.id} />}
+          {content?.type === 'document' && <DocumentPreview dirPath={content.dirPath} slug={content.slug} />}
         </div>
       </div>
     </>

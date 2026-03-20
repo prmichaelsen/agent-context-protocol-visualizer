@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.14.0] - 2026-03-20
+
+### Added
+- Artifacts nav item and routes (/artifacts, /artifacts/$slug) in sidebar
+- Document side panel preview for designs, patterns, and artifacts
+- DocumentPreview component with section label, markdown rendering, and maximize link
+- PreviewButton on each document list item to open side panel
+
+### Fixed
+- Designs and patterns pages now load correctly in GitHub/hosted mode (was missing ?repo= param extraction)
+- Consolidated duplicate getGitHubParams() into shared github-auth.ts export
+
 ## [0.13.4] - 2026-03-20
 
 ### Changed

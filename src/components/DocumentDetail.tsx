@@ -3,6 +3,7 @@ import { Breadcrumb } from './Breadcrumb'
 import { MarkdownContent, buildLinkMap } from './MarkdownContent'
 import { getMarkdownContent, listAgentDirectory } from '../services/markdown.service'
 import { useProgressData } from '../contexts/ProgressContext'
+import { getGitHubParams } from '../lib/github-auth'
 import type { MarkdownResult, AgentFile } from '../services/markdown.service'
 
 interface DocumentDetailProps {
@@ -10,17 +11,6 @@ interface DocumentDetailProps {
   dirPath: string
   sectionLabel: string
   sectionHref: string
-}
-
-/** Read ?repo=owner/repo from URL */
-function getGitHubParams(): { owner: string; repo: string } | undefined {
-  if (typeof window === 'undefined') return undefined
-  const params = new URLSearchParams(window.location.search)
-  const repo = params.get('repo')
-  if (!repo) return undefined
-  const parts = repo.split('/')
-  if (parts.length < 2) return undefined
-  return { owner: parts[0], repo: parts[1] }
 }
 
 export function DocumentDetail({ slug, dirPath, sectionLabel, sectionHref }: DocumentDetailProps) {

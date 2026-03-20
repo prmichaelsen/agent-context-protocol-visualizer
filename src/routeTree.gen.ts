@@ -16,6 +16,7 @@ import { Route as PatternsRouteImport } from './routes/patterns'
 import { Route as MilestonesRouteImport } from './routes/milestones'
 import { Route as GithubRouteImport } from './routes/github'
 import { Route as DesignsRouteImport } from './routes/designs'
+import { Route as ArtifactsRouteImport } from './routes/artifacts'
 import { Route as ActivityRouteImport } from './routes/activity'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TasksIndexRouteImport } from './routes/tasks.index'
@@ -23,11 +24,13 @@ import { Route as ReportsIndexRouteImport } from './routes/reports.index'
 import { Route as PatternsIndexRouteImport } from './routes/patterns.index'
 import { Route as MilestonesIndexRouteImport } from './routes/milestones.index'
 import { Route as DesignsIndexRouteImport } from './routes/designs.index'
+import { Route as ArtifactsIndexRouteImport } from './routes/artifacts.index'
 import { Route as TasksTaskIdRouteImport } from './routes/tasks.$taskId'
 import { Route as ReportsSlugRouteImport } from './routes/reports.$slug'
 import { Route as PatternsSlugRouteImport } from './routes/patterns.$slug'
 import { Route as MilestonesMilestoneIdRouteImport } from './routes/milestones.$milestoneId'
 import { Route as DesignsSlugRouteImport } from './routes/designs.$slug'
+import { Route as ArtifactsSlugRouteImport } from './routes/artifacts.$slug'
 import { Route as ApiWatchRouteImport } from './routes/api/watch'
 import { Route as AuthGithubCallbackRouteImport } from './routes/auth/github/callback'
 
@@ -66,6 +69,11 @@ const DesignsRoute = DesignsRouteImport.update({
   path: '/designs',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArtifactsRoute = ArtifactsRouteImport.update({
+  id: '/artifacts',
+  path: '/artifacts',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ActivityRoute = ActivityRouteImport.update({
   id: '/activity',
   path: '/activity',
@@ -101,6 +109,11 @@ const DesignsIndexRoute = DesignsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DesignsRoute,
 } as any)
+const ArtifactsIndexRoute = ArtifactsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ArtifactsRoute,
+} as any)
 const TasksTaskIdRoute = TasksTaskIdRouteImport.update({
   id: '/$taskId',
   path: '/$taskId',
@@ -126,6 +139,11 @@ const DesignsSlugRoute = DesignsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => DesignsRoute,
 } as any)
+const ArtifactsSlugRoute = ArtifactsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ArtifactsRoute,
+} as any)
 const ApiWatchRoute = ApiWatchRouteImport.update({
   id: '/api/watch',
   path: '/api/watch',
@@ -140,6 +158,7 @@ const AuthGithubCallbackRoute = AuthGithubCallbackRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
+  '/artifacts': typeof ArtifactsRouteWithChildren
   '/designs': typeof DesignsRouteWithChildren
   '/github': typeof GithubRoute
   '/milestones': typeof MilestonesRouteWithChildren
@@ -148,11 +167,13 @@ export interface FileRoutesByFullPath {
   '/search': typeof SearchRoute
   '/tasks': typeof TasksRouteWithChildren
   '/api/watch': typeof ApiWatchRoute
+  '/artifacts/$slug': typeof ArtifactsSlugRoute
   '/designs/$slug': typeof DesignsSlugRoute
   '/milestones/$milestoneId': typeof MilestonesMilestoneIdRoute
   '/patterns/$slug': typeof PatternsSlugRoute
   '/reports/$slug': typeof ReportsSlugRoute
   '/tasks/$taskId': typeof TasksTaskIdRoute
+  '/artifacts/': typeof ArtifactsIndexRoute
   '/designs/': typeof DesignsIndexRoute
   '/milestones/': typeof MilestonesIndexRoute
   '/patterns/': typeof PatternsIndexRoute
@@ -166,11 +187,13 @@ export interface FileRoutesByTo {
   '/github': typeof GithubRoute
   '/search': typeof SearchRoute
   '/api/watch': typeof ApiWatchRoute
+  '/artifacts/$slug': typeof ArtifactsSlugRoute
   '/designs/$slug': typeof DesignsSlugRoute
   '/milestones/$milestoneId': typeof MilestonesMilestoneIdRoute
   '/patterns/$slug': typeof PatternsSlugRoute
   '/reports/$slug': typeof ReportsSlugRoute
   '/tasks/$taskId': typeof TasksTaskIdRoute
+  '/artifacts': typeof ArtifactsIndexRoute
   '/designs': typeof DesignsIndexRoute
   '/milestones': typeof MilestonesIndexRoute
   '/patterns': typeof PatternsIndexRoute
@@ -182,6 +205,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/activity': typeof ActivityRoute
+  '/artifacts': typeof ArtifactsRouteWithChildren
   '/designs': typeof DesignsRouteWithChildren
   '/github': typeof GithubRoute
   '/milestones': typeof MilestonesRouteWithChildren
@@ -190,11 +214,13 @@ export interface FileRoutesById {
   '/search': typeof SearchRoute
   '/tasks': typeof TasksRouteWithChildren
   '/api/watch': typeof ApiWatchRoute
+  '/artifacts/$slug': typeof ArtifactsSlugRoute
   '/designs/$slug': typeof DesignsSlugRoute
   '/milestones/$milestoneId': typeof MilestonesMilestoneIdRoute
   '/patterns/$slug': typeof PatternsSlugRoute
   '/reports/$slug': typeof ReportsSlugRoute
   '/tasks/$taskId': typeof TasksTaskIdRoute
+  '/artifacts/': typeof ArtifactsIndexRoute
   '/designs/': typeof DesignsIndexRoute
   '/milestones/': typeof MilestonesIndexRoute
   '/patterns/': typeof PatternsIndexRoute
@@ -207,6 +233,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/activity'
+    | '/artifacts'
     | '/designs'
     | '/github'
     | '/milestones'
@@ -215,11 +242,13 @@ export interface FileRouteTypes {
     | '/search'
     | '/tasks'
     | '/api/watch'
+    | '/artifacts/$slug'
     | '/designs/$slug'
     | '/milestones/$milestoneId'
     | '/patterns/$slug'
     | '/reports/$slug'
     | '/tasks/$taskId'
+    | '/artifacts/'
     | '/designs/'
     | '/milestones/'
     | '/patterns/'
@@ -233,11 +262,13 @@ export interface FileRouteTypes {
     | '/github'
     | '/search'
     | '/api/watch'
+    | '/artifacts/$slug'
     | '/designs/$slug'
     | '/milestones/$milestoneId'
     | '/patterns/$slug'
     | '/reports/$slug'
     | '/tasks/$taskId'
+    | '/artifacts'
     | '/designs'
     | '/milestones'
     | '/patterns'
@@ -248,6 +279,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/activity'
+    | '/artifacts'
     | '/designs'
     | '/github'
     | '/milestones'
@@ -256,11 +288,13 @@ export interface FileRouteTypes {
     | '/search'
     | '/tasks'
     | '/api/watch'
+    | '/artifacts/$slug'
     | '/designs/$slug'
     | '/milestones/$milestoneId'
     | '/patterns/$slug'
     | '/reports/$slug'
     | '/tasks/$taskId'
+    | '/artifacts/'
     | '/designs/'
     | '/milestones/'
     | '/patterns/'
@@ -272,6 +306,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ActivityRoute: typeof ActivityRoute
+  ArtifactsRoute: typeof ArtifactsRouteWithChildren
   DesignsRoute: typeof DesignsRouteWithChildren
   GithubRoute: typeof GithubRoute
   MilestonesRoute: typeof MilestonesRouteWithChildren
@@ -334,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/artifacts': {
+      id: '/artifacts'
+      path: '/artifacts'
+      fullPath: '/artifacts'
+      preLoaderRoute: typeof ArtifactsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/activity': {
       id: '/activity'
       path: '/activity'
@@ -383,6 +425,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsIndexRouteImport
       parentRoute: typeof DesignsRoute
     }
+    '/artifacts/': {
+      id: '/artifacts/'
+      path: '/'
+      fullPath: '/artifacts/'
+      preLoaderRoute: typeof ArtifactsIndexRouteImport
+      parentRoute: typeof ArtifactsRoute
+    }
     '/tasks/$taskId': {
       id: '/tasks/$taskId'
       path: '/$taskId'
@@ -418,6 +467,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsSlugRouteImport
       parentRoute: typeof DesignsRoute
     }
+    '/artifacts/$slug': {
+      id: '/artifacts/$slug'
+      path: '/$slug'
+      fullPath: '/artifacts/$slug'
+      preLoaderRoute: typeof ArtifactsSlugRouteImport
+      parentRoute: typeof ArtifactsRoute
+    }
     '/api/watch': {
       id: '/api/watch'
       path: '/api/watch'
@@ -434,6 +490,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface ArtifactsRouteChildren {
+  ArtifactsSlugRoute: typeof ArtifactsSlugRoute
+  ArtifactsIndexRoute: typeof ArtifactsIndexRoute
+}
+
+const ArtifactsRouteChildren: ArtifactsRouteChildren = {
+  ArtifactsSlugRoute: ArtifactsSlugRoute,
+  ArtifactsIndexRoute: ArtifactsIndexRoute,
+}
+
+const ArtifactsRouteWithChildren = ArtifactsRoute._addFileChildren(
+  ArtifactsRouteChildren,
+)
 
 interface DesignsRouteChildren {
   DesignsSlugRoute: typeof DesignsSlugRoute
@@ -504,6 +574,7 @@ const TasksRouteWithChildren = TasksRoute._addFileChildren(TasksRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ActivityRoute: ActivityRoute,
+  ArtifactsRoute: ArtifactsRouteWithChildren,
   DesignsRoute: DesignsRouteWithChildren,
   GithubRoute: GithubRoute,
   MilestonesRoute: MilestonesRouteWithChildren,
